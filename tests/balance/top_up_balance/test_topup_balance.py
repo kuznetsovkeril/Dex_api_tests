@@ -1,3 +1,4 @@
+import random
 import time
 
 from utilities.api import Dexart_api
@@ -9,7 +10,14 @@ from utilities.getters import Getters
 """Top-up balance"""
 
 
-class Test_top_up_balance:
+# нужно слегка отрефакторить
+
+class TestTopUpBalance:
+
+    @staticmethod # генерация рандомного чилса в интервале от a и b
+    def random_amount(a, b):
+        random_amount = random.randint(a, b)
+        return random_amount
 
     def test_top_up_balance(self):
         # получаем текущий баланс юзера
@@ -18,7 +26,9 @@ class Test_top_up_balance:
         current_dxa_balance = Getters.get_json_field_value_3(result_dxa_balance, "data", "balance", "balance")
 
         # покупка DXA
-        result = Dexart_api.buy_dxa(AUTH_TOPUP_BALANCE, driver="oton", amount=150)  # оплачиваю криптой, так проще
+        amount = self.random_amount(100, 10000) # генерирую рандомное число
+        amount_transaction = f'{amount:,.8f}'
+        result = Dexart_api.buy_dxa(AUTH_TOPUP_BALANCE, driver="oton", amount=amount)  # оплачиваю криптой, так проще
         Checking.check_status_code(result, 201)
 
         # проеряем, что id заказа = 1 и еще не оплачен
@@ -50,6 +60,20 @@ class Test_top_up_balance:
         result_new_dxa_balance = Dexart_api.user_dxa_balance(AUTH_TOPUP_BALANCE)
         Checking.check_status_code(result_new_dxa_balance, 200)
         new_dxa_balance = Getters.get_json_field_value_3(result_new_dxa_balance, "data", "balance", "balance")
-        expected_new_balance = float(current_dxa_balance) + 150.00000000
+        expected_new_balance = float(current_dxa_balance) + amount
         Checking.assert_values(float(new_dxa_balance), expected_new_balance)
         print("Баланс успешно пополнился после покупки DXA")
+
+        # проверка транзакции пополнения баланса у пользователя
+        user_transactions = Dexart_api.user_transaction(AUTH_TOPUP_BALANCE)
+        print(f'В транзакции ожидается сумма: {amount_transaction}')
+        transaction_amount = Getters.get_object_json_field_value(user_transactions, "data", 0, "amount")
+        Checking.assert_values(amount_transaction, transaction_amount)
+        transaction_description = Getters.get_object_json_field_value(user_transactions, "data", 0, "description")
+        Checking.assert_values("Balance top-up", transaction_description)
+        transaction_status = Getters.get_object_json_field_value_3(user_transactions, "data", 0, "status", "id")
+        Checking.assert_values(2, transaction_status)
+        transaction_type = Getters.get_object_json_field_value_3(user_transactions, "data", 0, "type", "id")
+        Checking.assert_values(7, transaction_type)
+        transaction_is_income = Getters.get_object_json_field_value_3(user_transactions, "data", 0, "type", "is_income")
+        Checking.assert_values(1, transaction_is_income)

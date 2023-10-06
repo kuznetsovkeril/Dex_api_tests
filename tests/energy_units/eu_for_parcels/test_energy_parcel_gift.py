@@ -1,7 +1,5 @@
 import time
 
-import pytest
-
 from utilities.api import Dexart_api
 from utilities.api import Energy_api
 from utilities.utilities import Instruments
@@ -11,6 +9,12 @@ from utilities.getters import Getters
 
 
 class TestEnergyGift:
+
+    """Проверка выдачи и объема выданныех EU tokens за покупку парселя"""
+
+    # FAR	40$ - 4 по 10$ = 4
+    # MEDIUM	65$ - 6 по 10$ и 5 по 1$ = 11
+    # CENTER	182$ - 18 по 10$ и 2 по 1$ = 20
 
     @staticmethod  # получаем баланс неактивных юнитов юзера
     def get_inactive_units_balance(auth_token):
@@ -188,7 +192,3 @@ class TestEnergyGift:
         expected_new_tokens_balance = current_tokens_balance + check_new_tokens_balance  # ожидаемое изменение на балансе
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
-
-# FAR	40$ - 4 по 10$ = 4
-# MEDIUM	65$ - 6 по 10$ и 5 по 1$ = 11
-# CENTER	182$ - 18 по 10$ и 2 по 1$ = 20

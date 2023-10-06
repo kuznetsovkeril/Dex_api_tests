@@ -144,7 +144,7 @@ class Checking():
         if value_searched in check_value:
             print(f'Искомое значение "{value_searched}" присутствует! PASSED')
         else:
-            raise AssertionError(f'Искомое значение "{value_searched}" НЕ найдено! FAILED')
+            raise AssertionError(f'Искомое значение НЕ найдено! FAILED')
 
     """Метод получения значения из вложенного поля в ответе"""
 

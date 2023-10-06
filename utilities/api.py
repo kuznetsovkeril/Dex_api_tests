@@ -110,6 +110,7 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    """Создание транзакции пользователю"""
     @staticmethod
     def create_transaction(currency_id, user_id, type_id, status_id, dxa_amount):
         resource = '/api/v1/transactions'
@@ -139,7 +140,22 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    """Получении транзакций пользователя (учесть, что есть пагинация)"""
+
+    @staticmethod
+    def user_transaction(auth_token):
+        resource = '/api/v1/user/transactions'
+        url = DEXART_DEV + resource
+        print(f'URL: {url}')
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        result = Http_method.get(url, headers)
+        return result
+
     """Получение спискай парселей по району"""
+
     @staticmethod
     def get_region_parcels(region):
         resource = f'/api/v1/maps/districts/{region}/parcels'

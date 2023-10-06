@@ -16,14 +16,14 @@ class Getters():
             else:
                 print(f'Искомое значение не найдено')
 
-    @staticmethod
+    @staticmethod # получаем поле с множеством объектов на втором уровне вложенности
     def get_json_field_value(result, field_name_1, field_name_2, index, field_name_3):
         json_response = json.loads(result.text)
         field_value = json_response[field_name_1][field_name_2][index][field_name_3]
         print(f'Значение из объекта #{index + 1} в поле "{field_name_3}": {field_value}')
         return field_value
 
-    @staticmethod
+    @staticmethod # простое получение значения поля на втором уровне вложенности
     def get_json_field_value_2(result, field_name_1, field_name_2):
         json_response = json.loads(result.text)
         field_value = json_response[field_name_1][field_name_2]
@@ -44,6 +44,13 @@ class Getters():
         print(f'Значение в поле "{field_name_4}": {field_value}')
         return field_value
 
+    @staticmethod # получение значения поля с вложенными объектами в первом уровне
+    def get_object_json_field_value(result, field_name_1, index, field_name_2):
+        json_response = json.loads(result.text)
+        field_value = json_response[field_name_1][index][field_name_2]  # Получаем объект с заданным индексом
+        print(f'Значение из объекта #{index + 1} в массиве "{field_name_1}" в поле "{field_name_2}": {field_value}')
+        return field_value
+
     @staticmethod # поиск парселя по статусу и ценовой зоне в конкретном районе
     def get_parcel_by_status(result, status_id, price_zone):
         parsed_json_data = json.loads(result.text)
@@ -60,3 +67,10 @@ class Getters():
         else:
             raise ValueError("Парсел с заданными параметрами не найден")
         # выводим сообщение, если ничего не найдено
+
+    @staticmethod # метод получения значения поля из множества объектов на третьем уровне вложенности
+    def get_object_json_field_value_3(result, field_name_1, index, field_name_2, field_name_3):
+        json_response = json.loads(result.text)
+        field_value = json_response[field_name_1][index][field_name_2][field_name_3]  # Получаем объект с заданным индексом
+        print(f'Значение из объекта #{index + 1} в поле "{field_name_2}.{field_name_3}": {field_value}')
+        return field_value

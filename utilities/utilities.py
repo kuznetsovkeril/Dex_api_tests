@@ -1,4 +1,5 @@
 import uuid  # модуль для создания уникальной стройки
+import random
 
 
 class Instruments:
@@ -25,3 +26,26 @@ class Instruments:
     #     print("Значения приблизительно равны.")
     # else:
     #     print("Значения не равны.")
+
+    """Метод для округления суммы после запятой"""
+    @staticmethod
+    def round_num(value, index):
+        # index = кол-во знаков до которого надо округлить
+        # value = округляемое значение
+        num = value
+        round_num = round(num, index)  # Округляем до двух знаков после запятой
+        print(round_num)
+
+    """Метод генерации рандомного 4х-значного числа"""
+    @staticmethod
+    def random_num(self):
+        random_number = random.randint(100, 999)
+        print(random_number)
+
+    @staticmethod
+    def round_num(value, index):
+        # index = кол-во знаков до которого надо округлить
+        # value = округляемое значение
+        num = value
+        round_num = round(num, index)  # Округляем до двух знаков после запятой
+        print(round_num)
