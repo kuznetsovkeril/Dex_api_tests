@@ -146,8 +146,17 @@ class Checking():
         else:
             raise AssertionError(f'Искомое значение НЕ найдено! FAILED')
 
-    """Метод получения значения из вложенного поля в ответе"""
+    @staticmethod
+    def check_json_value_searched_1(result, field_name_1, value_searched):
+        json_response = json.loads(result.text)
+        field_value = json_response[field_name_1]
+        if value_searched in field_value:
+            print(f'Искомое значение "{value_searched}" присутствует! PASSED')
+        else:
+            raise AssertionError(f'Искомое значение НЕ найдено! FAILED')
 
+
+    """Метод получения значения из вложенного поля в ответе"""
 
     @staticmethod
     def get_json_value(result, field_name_1, field_name_2):

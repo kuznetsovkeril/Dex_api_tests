@@ -200,6 +200,28 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    """Блок 2FA"""
+
+    """Вывод DXA с баланса"""
+
+    @staticmethod
+    def withdraw_dxa(auth_token, amount, code, bsc_address):
+        resource = '/api/v1/user/balance/withdrawal'
+        url = DEXART_DEV + resource
+
+        payload = json.dumps({
+            "amount": amount,
+            "code": code,
+            "destination": bsc_address
+        })
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        #print(f'Response: {result.text}')
+        return result
 
 
 class Nft_api:

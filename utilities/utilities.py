@@ -1,9 +1,9 @@
 import uuid  # модуль для создания уникальной стройки
 import random
+import pyotp
 
 
 class Instruments:
-
     """Метод генерации уникальных email"""
 
     @staticmethod
@@ -28,19 +28,6 @@ class Instruments:
     #     print("Значения не равны.")
 
     """Метод для округления суммы после запятой"""
-    @staticmethod
-    def round_num(value, index):
-        # index = кол-во знаков до которого надо округлить
-        # value = округляемое значение
-        num = value
-        round_num = round(num, index)  # Округляем до двух знаков после запятой
-        print(round_num)
-
-    """Метод генерации рандомного 4х-значного числа"""
-    @staticmethod
-    def random_num(self):
-        random_number = random.randint(100, 999)
-        print(random_number)
 
     @staticmethod
     def round_num(value, index):
@@ -49,3 +36,32 @@ class Instruments:
         num = value
         round_num = round(num, index)  # Округляем до двух знаков после запятой
         print(round_num)
+
+    """Метод генерации рандомного числа"""
+
+    @staticmethod  # генерация рандомного чилса в интервале от a и b
+    def random_num(a, b):
+        random_num = random.randint(a, b)
+        return random_num
+
+    """Метод округления числа"""
+    @staticmethod
+    def round_numm(value, index):
+        # index = кол-во знаков до которого надо округлить
+        # value = округляемое значение
+        num = value
+        round_num = round(num, index)  # Округляем до двух знаков после запятой
+        print(round_num)
+
+    """Метод округления числа"""
+    @staticmethod
+    def generate_2fa_code(secret):
+        # секретный ключ гугл auth
+        secret_key = secret
+        # создание объекта TOTP с использованием секретного ключа
+        totp = pyotp.TOTP(secret_key)
+        # генерация кода
+        otp_code = totp.now()
+        # Используйте otp_code в вашем автотесте
+        print("Сгенерированный OTP-код:", otp_code)
+        return otp_code

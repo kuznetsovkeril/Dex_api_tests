@@ -10,11 +10,9 @@ from utilities.getters import Getters
 """Top-up balance"""
 
 
-# нужно слегка отрефакторить
-
 class TestTopUpBalance:
 
-    @staticmethod # генерация рандомного чилса в интервале от a и b
+    @staticmethod  # генерация рандомного чилса в интервале от a и b
     def random_amount(a, b):
         random_amount = random.randint(a, b)
         return random_amount
@@ -26,8 +24,8 @@ class TestTopUpBalance:
         current_dxa_balance = Getters.get_json_field_value_3(result_dxa_balance, "data", "balance", "balance")
 
         # покупка DXA
-        amount = self.random_amount(100, 10000) # генерирую рандомное число
-        amount_transaction = f'{amount:,.8f}'
+        amount = self.random_amount(100, 10000)  # генерирую рандомное число
+        expected_transaction_amount = f'{amount:,.8f}'
         result = Dexart_api.buy_dxa(AUTH_TOPUP_BALANCE, driver="oton", amount=amount)  # оплачиваю криптой, так проще
         Checking.check_status_code(result, 201)
 
@@ -66,9 +64,9 @@ class TestTopUpBalance:
 
         # проверка транзакции пополнения баланса у пользователя
         user_transactions = Dexart_api.user_transaction(AUTH_TOPUP_BALANCE)
-        print(f'В транзакции ожидается сумма: {amount_transaction}')
         transaction_amount = Getters.get_object_json_field_value(user_transactions, "data", 0, "amount")
-        Checking.assert_values(amount_transaction, transaction_amount)
+        print(f'В транзакции ожидается сумма: {expected_transaction_amount}')
+        Checking.assert_values(expected_transaction_amount, transaction_amount)
         transaction_description = Getters.get_object_json_field_value(user_transactions, "data", 0, "description")
         Checking.assert_values("Balance top-up", transaction_description)
         transaction_status = Getters.get_object_json_field_value_3(user_transactions, "data", 0, "status", "id")
