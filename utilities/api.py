@@ -1,9 +1,7 @@
 from utilities.http_methods import Http_method
 from configuration import DEXART_DEV
-from configuration import API_KEY_DEV
+from src.secrets import API_KEY_DEV
 from configuration import MERCHANT_PROD
-from configuration import ENERGY_DEV
-from configuration import API_KEY_DEV_ENERGY
 import json
 
 
@@ -221,6 +219,66 @@ class Dexart_api:
         print(f'URL: {url}')
         result = Http_method.post(url, payload, headers)
         #print(f'Response: {result.text}')
+        return result
+
+    """блок Gravity Guys"""
+
+    @staticmethod
+    def royalties_statistics():
+        resource = '/api/v1/app/gravity/statistics'
+        url = DEXART_DEV + resource
+
+        payload = {}
+        headers = {"api-key": API_KEY_DEV}
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    @staticmethod
+    def buy_booster(auth_token, booster_id, amount, room_id):
+        resource = '/api/v1/gravity-guys/boosters/set'
+        url = DEXART_DEV + resource
+        # room_id = Air Test or Pool
+        # booster_id = "id": 6 - price 100 DXA, "id": 3 - price 5 DXA
+        payload = {'booster_id': booster_id,
+                   'amount': amount,
+                   'room_uid': room_id}
+        headers = {
+            'Authorization': f'Bearer {auth_token}'
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    @staticmethod
+    def ticket_buy(auth_token, room_id):
+        resource = '/api/v1/gravity-guys/records/user-record/buy-tiket'
+        url = DEXART_DEV + resource
+        # room_id = Air Test or Pool
+        # price = 1 DXA
+        payload = {'room_uid': room_id}
+        headers = {
+            'Authorization': f'Bearer {auth_token}'
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    @staticmethod
+    def give_royalties():
+        resource = '/api/v1/gravity-guys/records/user-record/buy-tiket'
+        url = DEXART_DEV + resource
+        payload = {}
+        headers = {
+            'api-key': API_KEY_DEV
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        print("Роялти успешно выданы.")
         return result
 
 

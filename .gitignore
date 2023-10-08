@@ -1,0 +1,4 @@
+configuration.py
+src/auth_tokens.py
+/src/secrets.py
+/allure_report/

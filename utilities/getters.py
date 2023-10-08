@@ -6,6 +6,7 @@ import json
 class Getters():
 
     @staticmethod  # поиск конкретных данных из ответа json с множеством объектов, например,нужно найти какое-то поле у юзера для nft с id 48
+    #этот метод пока не использовался, но может
     def get_field_value_among_objects(result, field_name_1, field_name_2, searched_value, field_name_3):
         data = json.load(result.text)
         for item in data[field_name_1]:
@@ -15,6 +16,13 @@ class Getters():
                 return result_value
             else:
                 print(f'Искомое значение не найдено')
+
+    @staticmethod  # простое получение значения из поля без вложений
+    def get_json_field_value_0(result, field_name_1):
+        json_response = json.loads(result.text)
+        field_value = json_response[field_name_1]
+        print(f'Значение в поле "{field_name_1}": {field_value}')
+        return field_value
 
     @staticmethod # получаем поле с множеством объектов на втором уровне вложенности
     def get_json_field_value(result, field_name_1, field_name_2, index, field_name_3):
