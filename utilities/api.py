@@ -269,7 +269,7 @@ class Dexart_api:
 
     @staticmethod
     def give_royalties():
-        resource = '/api/v1/gravity-guys/records/user-record/buy-tiket'
+        resource = '/api/v1/app/give/royalties'
         url = DEXART_DEV + resource
         payload = {}
         headers = {
