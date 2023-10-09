@@ -91,7 +91,7 @@ class TestRoyaltyStatistics:
             if check_message == "Already have a tiket":
 
                 time.sleep(3)
-
+                # проверка изменения дохода в fund и fund_acc после покупки билетов
                 self.assert_fund_income(old_fund_value, old_fund_acc_value, 0)
         # если поле с сообщением не найдено, считаем, что билет куплен, и в fund + 1
         except KeyError:
@@ -100,10 +100,11 @@ class TestRoyaltyStatistics:
             print("Билет успешно куплен")
 
             time.sleep(3)
-
+            # проверка изменения дохода в fund и fund_acc после покупки билетов
             self.assert_fund_income(old_fund_value, old_fund_acc_value, 1)
 
         """Покупка бустеров в разных комнатах"""
+
         # запрос статистики
         result = Dexart_api.royalties_statistics()
         # текущее значение в поле fund
@@ -113,7 +114,7 @@ class TestRoyaltyStatistics:
         self.buy_booster(booster_id, room_id)
 
         time.sleep(3)
-
+        # проверка изменения дохода в fund и fund_acc после покупки бустеров
         self.assert_fund_income(old_fund_value, old_fund_acc_value, booster_cost)
 
     # проверка кол-ва роялти для раздачи на данный момент
