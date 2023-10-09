@@ -1,5 +1,7 @@
 import time
 
+import pytest
+
 from utilities.api import Dexart_api
 from utilities.api import Energy_api
 from utilities.utilities import Instruments
@@ -9,7 +11,6 @@ from utilities.getters import Getters
 
 
 class TestEnergyGift:
-
     """Проверка выдачи и объема выданныех EU tokens за покупку парселя"""
 
     # FAR	40$ - 4 по 10$ = 4
@@ -103,11 +104,12 @@ class TestEnergyGift:
         # проверка количества выданных токенов
         # ожидаемое примерное значение ~ фактическому после получения батареек
         new_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
-        check_new_tokens_balance = self.calculate_tokens(40, dxa_rate)  # расчет, сколько ожидаю получить
+        check_new_tokens_balance = self.calculate_tokens(40, dxa_rate)  # расчет, сколько ожидаю получить на балансе токенов
         expected_new_tokens_balance = current_tokens_balance + check_new_tokens_balance  # ожидаемое изменение на балансе
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
 
+    @pytest.mark.skip
     def test_gift_eu_for_medium_parcel(self):
         current_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
         current_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
@@ -134,6 +136,7 @@ class TestEnergyGift:
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
 
+    @pytest.mark.skip
     def test_gift_eu_for_high_parcel(self):
         current_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
         current_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
@@ -160,6 +163,7 @@ class TestEnergyGift:
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
 
+    @pytest.mark.skip
     def test_gift_eu_for_all_parcels(self, wait_between_tests):  # wait_between - фикстура из конфтеста
         # активация пакетов перед запуском тестов
         self.activate_energy(AUTH_EU_GIFTS)

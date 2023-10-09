@@ -317,7 +317,7 @@ class Nft_api:
         })
         print(f'Тело запроса = {payload}')
         result = Http_method.post(url, payload, headers)
-        print(f'Response: {result.text}')
+        #print(f'Response: {result.text}')
         return result
 
     @staticmethod

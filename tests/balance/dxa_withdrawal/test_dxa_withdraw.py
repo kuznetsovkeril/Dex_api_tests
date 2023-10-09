@@ -10,13 +10,13 @@ from utilities.getters import Getters
 
 class TestDxaWithdrawal:
     """Тест вывода DXA с баланса"""
+    # В этом кейсе проверяется: вывод работает, баланс изменяется, корректная транзакция создается
 
     @staticmethod  # получение 2фа кода
     def get_2fa_code(secret):
         code = Instruments.generate_2fa_code(secret)
         return code
 
-    @pytest.mark.unit
     def test_dxa_withdrawal(self):
         # получаем текущий баланс юзера
         result_dxa_balance = Dexart_api.user_dxa_balance(AUTH_DXA_WITHDRAW)
@@ -43,7 +43,8 @@ class TestDxaWithdrawal:
         print(f'Баланс после вывода DXA = {new_user_balance}')
         Checking.assert_values(expected_balance, float(new_user_balance))
 
-        # проверка, что создана транзакция выводода
+        # проверка, что создана транзакция вывода
+        # проверка самой транзакции
         user_transactions = Dexart_api.user_transaction(AUTH_DXA_WITHDRAW)
         transaction_amount = Getters.get_object_json_field_value(user_transactions, "data", 0, "amount")
         print(f'В транзакции ожидается сумма: {expected_transaction_amount}')
