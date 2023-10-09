@@ -89,18 +89,10 @@ class TestRoyaltyStatistics:
             check_message = Getters.get_json_field_value_2(result_buy_ticket, "data", "message")
             # проверка, что билет куплен, тогда в fund +0
             if check_message == "Already have a tiket":
-                expected_income = 0
+
                 time.sleep(3)
 
-                result = Dexart_api.royalties_statistics()
-                new_fund_value = Getters.get_json_field_value_0(result, "fund")
-                new_fund_acc_value = Getters.get_json_field_value_0(result, "fund_acc")
-                expected_fund_income = old_fund_value
-                print(f'Ожидаемое новое fund_income = {expected_fund_income}')
-                Checking.assert_values(expected_fund_income, new_fund_value)
-                expected_fund_acc_income = old_fund_acc_value
-                print(f'Ожидаемое новое fund_acc_income = {expected_fund_acc_income}')
-                Checking.assert_values(expected_fund_acc_income, new_fund_acc_value)
+                self.assert_fund_income(old_fund_value, old_fund_acc_value, 0)
         # если поле с сообщением не найдено, считаем, что билет куплен, и в fund + 1
         except KeyError:
             # цена одного билета 1 DXA
@@ -109,17 +101,7 @@ class TestRoyaltyStatistics:
 
             time.sleep(3)
 
-            result = Dexart_api.royalties_statistics()
-            new_fund_value = Getters.get_json_field_value_0(result, "fund")
-            new_fund_acc_value = Getters.get_json_field_value_0(result, "fund_acc")
-            expected_fund_income = old_fund_value + expected_income
-            print(f'Ожидаемое новое fund_income = {expected_fund_income}')
-            Checking.assert_values(expected_fund_income, new_fund_value)
-            print("Поле fund изменилось после покупки билета на верную сумму")
-            expected_fund_acc_income = old_fund_acc_value + expected_income
-            print(f'Ожидаемое новое fund_acc_income = {expected_fund_acc_income}')
-            Checking.assert_values(expected_fund_acc_income, new_fund_acc_value)
-            print("Поле fund_acc изменилось после покупки билета на верную сумму")
+            self.assert_fund_income(old_fund_value, old_fund_acc_value, 1)
 
         """Покупка бустеров в разных комнатах"""
         # запрос статистики
@@ -132,17 +114,7 @@ class TestRoyaltyStatistics:
 
         time.sleep(3)
 
-        result = Dexart_api.royalties_statistics()
-        new_fund_value = Getters.get_json_field_value_0(result, "fund")
-        new_fund_acc_value = Getters.get_json_field_value_0(result, "fund_acc")
-        expected_fund_income = old_fund_value + booster_cost
-        print(f'Ожидаемое новое fund_income = {expected_fund_income}')
-        Checking.assert_values(expected_fund_income, new_fund_value)
-        print("Поле fund изменилось после покупки бустера на верную сумму")
-        expected_fund_acc_income = old_fund_acc_value + booster_cost
-        print(f'Ожидаемое новое fund_acc_income = {expected_fund_acc_income}')
-        Checking.assert_values(expected_fund_acc_income, new_fund_acc_value)
-        print("Поле fund_acc изменилось после покупки бустера на верную сумму")
+        self.assert_fund_income(old_fund_value, old_fund_acc_value, booster_cost)
 
     # проверка кол-ва роялти для раздачи на данный момент
     def test_total_royalties(self):
