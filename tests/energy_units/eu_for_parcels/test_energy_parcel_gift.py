@@ -74,9 +74,9 @@ class TestEnergyGift:
     @staticmethod  # сравнивается реальное ожидаемое кол-во токенов, с учетом заданного отклонения
     def approximate_tokens_assertion(real_value, expected_value, tolerance):
         if Instruments.approximately_equal(real_value, expected_value, tolerance):
-            print("Количество токенов сходится с ожиданием")
+            print("Количество токенов сходится с ожиданием.")
         else:
-            print("Количество токенов НЕ сходится с ожиданием")
+            raise ValueError("Количество токенов НЕ сходится с ожиданием.")
 
     def test_gift_eu_for_low_parcel(self):
         # активация пакетов перед запуском тестов

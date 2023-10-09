@@ -95,6 +95,7 @@ class Dexart_api:
         return result
 
     """Получение курса токена DXA к USD"""
+
     @staticmethod
     def dxa_usd_rate():
         resource = '/api/v1/dxa/rate'
@@ -109,6 +110,7 @@ class Dexart_api:
         return result
 
     """Создание транзакции пользователю"""
+
     @staticmethod
     def create_transaction(currency_id, user_id, type_id, status_id, dxa_amount):
         resource = '/api/v1/transactions'
@@ -164,6 +166,7 @@ class Dexart_api:
         return result
 
     """Добавление парселя в коризну"""
+
     @staticmethod
     def add_parcel_to_cart(auth_token, parcel_id):
         resource = '/api/v1/user/cart'
@@ -180,6 +183,7 @@ class Dexart_api:
         return result
 
     """Добавление парселя в коризну"""
+
     @staticmethod
     def buy_parcel(auth_token, driver, email):
         resource = '/api/v1/user/cart/buy'
@@ -218,7 +222,7 @@ class Dexart_api:
         }
         print(f'URL: {url}')
         result = Http_method.post(url, payload, headers)
-        #print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
     """блок Gravity Guys"""
@@ -326,7 +330,7 @@ class Nft_api:
             'Authorization': 'Bearer ' + auth_token
         }
         result = Http_method.get(url, headers)
-        print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
 
@@ -394,7 +398,6 @@ class Merchant_api:
 
 
 class Energy_api:
-
     """Получение баланса батареек"""
 
     @staticmethod
@@ -443,4 +446,3 @@ class Energy_api:
         result = Http_method.post(url, payload_top_up, headers)
         print(f'Response: {result.text}')
         return result
-
