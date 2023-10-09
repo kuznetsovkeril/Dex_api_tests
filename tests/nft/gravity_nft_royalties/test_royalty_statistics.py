@@ -17,6 +17,7 @@ class TestRoyaltyStatistics:
     def give_royalties():
         result = Dexart_api.give_royalties()
         Checking.check_status_code(result, 200)
+        print("Все роялти выданы пользователям")
 
     # метод покупки booster
     @staticmethod
@@ -96,7 +97,6 @@ class TestRoyaltyStatistics:
         # если поле с сообщением не найдено, считаем, что билет куплен, и в fund + 1
         except KeyError:
             # цена одного билета 1 DXA
-            expected_income = 1
             print("Билет успешно куплен")
 
             time.sleep(3)
