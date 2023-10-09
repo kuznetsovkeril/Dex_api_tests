@@ -5,7 +5,7 @@ from utilities.utilities import Instruments
 """Регистрация пользователя по нативной рефке"""
 
 
-class Test_register_ref_dexart():
+class TestRegisterRefDexart:
 
     def test_ref_dexart(self):
         print("Register post method")
@@ -26,3 +26,13 @@ class Test_register_ref_dexart():
         """Проверка успешной регистрации у нужного рефа"""
         result_reg_check = Dexart_api.user_referral_info(auth_token)
         Checking.check_json_value_3(result_reg_check, "data", "ref", "id", ref_id)
+
+    def test_ref_partner(self):
+        pass
+        # тут будет кейс регистрации у партнера SpacAd
+
+    def test_ref_client_group(self):
+        pass
+        # тут будет кейс регистрации в группе клиентов ATON
+
+

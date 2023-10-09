@@ -69,8 +69,11 @@ class TestRoyaltyTransaction:
 
     """Проверка, что размер транзакции роялти составляет верное кол-во"""
 
-    @pytest.mark.parametrize("auth_token", [AUTH_NO_GG_NFT, AUTH_BONUS_NFT, AUTH_KIRTEST])
-    def test_royalties_transaction_amount(self, auth_token):
+    @pytest.mark.parametrize("auth_token, test_name", [
+        (AUTH_ONE_GRAVITY_NFT, "Testing royalties transaction amount with one Gravity NFT user"),
+        (AUTH_BONUS_NFT, "Testing royalties transaction amount with bonus Gravity NFT user"),
+        (AUTH_KIRTEST, "Testing royalties transaction amount with all kind of NFT on balance")])
+    def test_royalties_transaction_amount(self, auth_token, test_name):
         # получаю статистику и поля из статистики fund_acc и royalty
         statistics = self.refresh_statistic()
         fund_acc = Getters.get_json_field_value_0(statistics, "fund_acc")
@@ -102,11 +105,11 @@ class TestRoyaltyTransaction:
         royalty_amount = self.get_last_transaction(auth_token, "amount")
         print(f'Фактическое роялти: {royalty_amount}')
         print(f'Ожидаемое роялти: {expected_royalty_amount}')
-        self.approximately_assertion_values(expected_royalty_amount, sharp_royalty_amount, 0.00000009)
+        self.approximately_assertion_values(float(expected_royalty_amount), float(royalty_amount), 0.00000009)
 
     def test_royalties_for_no_nft_owner(self):
         # проверяю, что у юзера точно нет gravity NFT
-        user_nft_amount = self.user_nft_balance(AUTH_BONUS_NFT, 48)
+        user_nft_amount = self.user_nft_balance(AUTH_NO_GG_NFT, 48)
         if user_nft_amount is None:
             # получаю его список транзакций
             user_transaction = Dexart_api.user_transaction(AUTH_NO_GG_NFT)
@@ -119,4 +122,5 @@ class TestRoyaltyTransaction:
                     print(f'Транзакция начисления Royalties была найдена. t_id: {transaction_id}')
                     raise ValueError("Ошибка. Найдена транзакция Royalty у юзера без Gravity NFT")
             print(f'Транзакция Royalties НЕ найдена. PASSED.')
-        raise ValueError(f'У юзера есть Gravity NFT на балансе. Тест-кейс некорректен!')
+        else:
+            raise ValueError(f'У юзера есть Gravity NFT на балансе. Тест-кейс некорректен!')
