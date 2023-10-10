@@ -472,3 +472,14 @@ class Spacad_api:
         result = Http_method.get(url, headers)
         #print(f'Response: {result.text}')
         return result
+
+    # получение активности расписания на текущий момент, если активно - вернет часы, если нет вернет null
+    @staticmethod
+    def if_event_open_hours():
+        resource = f'/api/v1/coinglue/hours/current'
+        headers = {'Content-Type': 'application/json'}
+        url = COINGLUE_DEV + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
+        print(f'Response: {result.text}')
+        return result

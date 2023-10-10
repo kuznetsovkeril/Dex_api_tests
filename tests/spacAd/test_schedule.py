@@ -3,6 +3,7 @@ from datetime import datetime
 
 from utilities.api import Spacad_api
 from utilities.checking import Checking
+from utilities.getters import Getters
 
 
 class TestSpacAdSchedule:
@@ -46,6 +47,16 @@ class TestSpacAdSchedule:
         print(f'Current schedule: {schedule}')
         return schedule
 
+    # проверяю ответ для открытого и закрытого расписания
+    @staticmethod
+    def if_open_hours():
+        result = Spacad_api.if_event_open_hours()
+        Checking.check_status_code(result, 200)
+        open_hours_response = Getters.get_json_field_value_0(result, "data")
+        if open_hours_response is None:
+            return False
+        return True
+
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -59,8 +70,21 @@ class TestSpacAdSchedule:
         # просто сравниваем два значения
         Checking.assert_values(expected_response, result_response)
 
-    """Написать тест для юзера, который не входит в вайт лист"""
+        # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
+        if result_response or expected_response is False:
+            open_hours = False
+            assert open_hours == self.if_open_hours(), "Ошибка в текущем расписании"
+            print("Fasle. Расписания на сейчас нет, так как ивент недоступен")
+        else:
+            open_hours = True
+            assert open_hours == self.if_open_hours(), "Ошибка в текущем расписании"
+            print("True. Расписание не NULL, так как ивент доступен")
+
+
+
+    """Тест юзера, который не входит в white list"""
 
     def test_non_white_list_user(self):
-        # начало теста
-        pass  # это удалить
+        pass
+
+
