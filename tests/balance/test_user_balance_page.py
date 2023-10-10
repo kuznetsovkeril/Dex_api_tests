@@ -49,16 +49,16 @@ class Test_user_dxa_balance:
         print("Курс dxa успешно получен")
 
         # проверка, что при расчете баланса USD используется курс USD/DXA
-        # проверка округления баланса USD до сотых по матемическим правилам
+        # проверка округления баланса USD до сотых по математическим правилам
 
         result_balance = Dexart_api.user_dxa_balance(auth_token=AUTH_BALANCE_PAGE_USER)
         Checking.check_status_code(result_balance, 200)
         dxa_balance = Getters.get_json_field_value_3(result_balance, "data", "balance", "balance")
         real_usd_balance = Getters.get_json_field_value_3(result_balance, "data", "balance", "balance_usd")
         check_usd_balance = float(dxa_balance) * float(dxa_rate)
-        round_usd_balance = round(check_usd_balance, 2)
-        print(f'Баланс после округления = {round_usd_balance}')
-        Checking.assert_values(float(real_usd_balance), round_usd_balance)
+        expected_usd_balance = round(check_usd_balance, 2)
+        print(f'Баланс после округления = {expected_usd_balance}')
+        Checking.assert_values(expected_usd_balance, float(real_usd_balance))
         print("Баланс USD пошел проверку")
 
     # проверка, что у юзеров вне маркетингов дексарт нет статьи дохода реферальная программа, а остальные есть

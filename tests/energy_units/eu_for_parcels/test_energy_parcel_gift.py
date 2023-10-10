@@ -109,7 +109,6 @@ class TestEnergyGift:
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
 
-    @pytest.mark.skip
     def test_gift_eu_for_medium_parcel(self):
         current_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
         current_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
@@ -136,7 +135,6 @@ class TestEnergyGift:
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
 
-    @pytest.mark.skip
     def test_gift_eu_for_high_parcel(self):
         current_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
         current_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
@@ -163,7 +161,6 @@ class TestEnergyGift:
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
 
-    @pytest.mark.skip
     def test_gift_eu_for_all_parcels(self, wait_between_tests):  # wait_between - фикстура из конфтеста
         # активация пакетов перед запуском тестов
         self.activate_energy(AUTH_EU_GIFTS)

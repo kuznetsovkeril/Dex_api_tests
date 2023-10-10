@@ -4,6 +4,8 @@ from src.auth_tokens import AUTH_DXA_USER
 import json
 import time
 
+from utilities.utilities import Instruments
+
 
 class Test_nft_balance():
 
@@ -24,7 +26,7 @@ class Test_nft_balance():
         fields_name_nft = Checking.show_json_fields_for_in_item(result, "data", 0, "catalog_nft")
         expected_nft_fields = ['id', 'name', 'description', 'catalog_nft_group_id', 'picture', 'video', 'price',
                                'price_usd', 'sale', 'created_at', 'updated_at']
-        Checking.assert_values(fields_name_nft, expected_nft_fields)
+        Checking.assert_values(expected_nft_fields, fields_name_nft)
         print("В ответе присутствуют все необходимые поля")
 
     """Проверка, что после покупки баланс нфт меняется"""
@@ -49,7 +51,9 @@ class Test_nft_balance():
         """Проверка, что после покупки изменяется баланс NFT"""
 
         # покупка NFT
-        result_nft_buy = Nft_api.buy_nft(AUTH_DXA_USER, nft_id, 1, pay_method="balance")
+        amount = Instruments.random_num(1, 10)
+        print(f'Покупаемое количество NFT: {amount}')
+        result_nft_buy = Nft_api.buy_nft(AUTH_DXA_USER, nft_id, amount, pay_method="balance")
         print(f'Фактический статус код: {result.status_code}')
         Checking.check_status_code(result, 200)
 
@@ -73,9 +77,9 @@ class Test_nft_balance():
 
         # новый баланс должен быть такой
 
-        expected_new_nft_balance = user_nft_balance + 1
+        expected_new_nft_balance = user_nft_balance + amount
         print(f'NFT баланс после покупки: {expected_new_nft_balance}')
 
         # проверяем, что баланс действительно увеличился на кол-во покупаемых NFT
 
-        Checking.assert_values(new_nft_balance, expected_new_nft_balance)
+        Checking.assert_values(expected_new_nft_balance, new_nft_balance)

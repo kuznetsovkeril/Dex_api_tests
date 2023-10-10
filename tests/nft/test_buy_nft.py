@@ -7,7 +7,7 @@ import time
 """Покупка NFT"""
 
 
-class Test_buy_nft():
+class Test_buy_nft:
     """Проверка покупки NFT оплатой с баланса"""
 
     def test_nft_purchase_balance(self):
