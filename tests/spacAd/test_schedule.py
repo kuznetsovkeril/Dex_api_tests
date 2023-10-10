@@ -60,7 +60,7 @@ class TestSpacAdSchedule:
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
-        # что ожидаем получить
+        # что ожидаем получить. Если по расписанию сейчас закрыто, то вернет False, если открыто True
         expected_response = self.is_schedule_open(schedule)
         # что получим, если будем проситься в ивент заданной почтой
         email = "k.test@fexbox.org"  # всегда почта, которая есть в вайт листе
