@@ -176,33 +176,3 @@ class Checking():
     def assert_value_less(result, expected_value):
         assert result < expected_value, "Сравнение значений не пройдено"
         print(f'Сравнение значений успешно')
-
-# class Validate(BaseModel):
-#     """Валидация JSON полей в ответе NFT каталога"""
-#     id: int
-#     name: (int, float, str)
-#     description: str
-#     price: (int, float)
-#     price_usd: (int, float)
-#     price_usd_sale: (int, float)
-#     sale: (int, float)
-#     picture: str
-#     video: str
-#     created_at: str
-#     updated_at: str
-#
-#     def validate_catalog_nft_json(self, result):
-#         try:
-#             # Преобразуйте JSON-ответ в объект Python
-#             result_data = json.loads(result)
-#             if "data" in result_data:
-#                 # Проверьте каждый элемент в списке "data", тут же провалились в массив data
-#                 for item_data in result_data["data"]:
-#                     nft_item = NftCatalogJSON(**item_data) #распаковка словаря из ответа json и передача его как аргумента
-#                     print(f'JSON содержит верные {nft_item}')
-#             else:
-#                 print("JSON does not contain the 'data' field.")
-#         except json.JSONDecodeError as e:
-#             print(f"Invalid JSON: {e}")
-#         # except ValidationError as e:
-#         #     print(f"JSON does not match the expected schema: {e}")

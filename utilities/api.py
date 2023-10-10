@@ -317,7 +317,7 @@ class Nft_api:
         })
         print(f'Тело запроса = {payload}')
         result = Http_method.post(url, payload, headers)
-        #print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
     @staticmethod
@@ -449,9 +449,9 @@ class Energy_api:
 
 
 class Spacad_api:
-
     """проверка доступа к мероприятию по времени и вайт листу"""
 
+    # проверка на доступ к ивенту
     @staticmethod
     def is_eligible(email):
         resource = f'/api/v1/coinglue/is-eligible?email={email}'
@@ -460,4 +460,15 @@ class Spacad_api:
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
+        return result
+
+    # получение расписания ивента
+    @staticmethod
+    def get_event_schedule():
+        resource = f'/api/v1/coinglue/hours/current?all=1'
+        headers = {'Content-Type': 'application/json'}
+        url = COINGLUE_DEV + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
+        #print(f'Response: {result.text}')
         return result

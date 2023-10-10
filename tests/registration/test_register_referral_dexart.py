@@ -16,8 +16,6 @@ class TestRegisterRefDexart:
         # проверка статус кода
         print(f'Фактический статус код: {result_reg.status_code}')
         Checking.check_status_code(result_reg, 200)
-        # проверка наличия поля токен
-        Checking.check_one_field_in_json(result_reg, "token")
 
         """Получение токена авторизации из запроса регистрации"""
         auth_token = Checking.get_json_value(result_reg, "data", "token")

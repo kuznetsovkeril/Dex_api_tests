@@ -5,8 +5,10 @@ import pytest
 
 from utilities.api import Dexart_api
 from utilities.api import Merchant_api
-from utilities.checking import Checking
+
 from src.auth_tokens import AUTH_TOPUP_BALANCE
+from utilities.checking import Checking
+
 from utilities.getters import Getters
 
 """Top-up balance"""
