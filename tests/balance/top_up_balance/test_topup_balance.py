@@ -21,7 +21,7 @@ class TestTopUpBalance:
         random_amount = random.randint(a, b)
         return random_amount
 
-    @pytest.mark.parametrize("token", [1, 3, 8, 11, 10])
+    @pytest.mark.parametrize("token", [1, 10])   # также проверяется попытка пополнить за DXA [DEX-3379]
     def test_top_up_balance(self, token):
         # получаем текущий баланс юзера
         result_dxa_balance = Dexart_api.user_dxa_balance(AUTH_TOPUP_BALANCE)
