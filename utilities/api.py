@@ -1,5 +1,5 @@
 from utilities.http_methods import Http_method
-from configuration import DEXART_DEV
+from configuration import DEXART_DEV, COINGLUE_DEV
 from src.secrets import API_KEY_DEV
 from configuration import MERCHANT_PROD
 import json
@@ -444,5 +444,20 @@ class Energy_api:
         }
         print(f'URL: {url}')
         result = Http_method.post(url, payload_top_up, headers)
+        print(f'Response: {result.text}')
+        return result
+
+
+class Spacad_api:
+
+    """проверка доступа к мероприятию по времени и вайт листу"""
+
+    @staticmethod
+    def is_eligible(email):
+        resource = f'/api/v1/coinglue/is-eligible?email={email}'
+        headers = {'Content-Type': 'application/json'}
+        url = COINGLUE_DEV + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
         return result

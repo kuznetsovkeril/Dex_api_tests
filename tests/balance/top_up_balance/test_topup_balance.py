@@ -1,6 +1,8 @@
 import random
 import time
 
+import pytest
+
 from utilities.api import Dexart_api
 from utilities.api import Merchant_api
 from utilities.checking import Checking
@@ -17,7 +19,8 @@ class TestTopUpBalance:
         random_amount = random.randint(a, b)
         return random_amount
 
-    def test_top_up_balance(self):
+    @pytest.mark.parametrize("token", [1, 3, 8, 11, 10])
+    def test_top_up_balance(self, token):
         # получаем текущий баланс юзера
         result_dxa_balance = Dexart_api.user_dxa_balance(AUTH_TOPUP_BALANCE)
         Checking.check_status_code(result_dxa_balance, 200)
@@ -42,7 +45,8 @@ class TestTopUpBalance:
         print(merchant_id)
 
         # оплачиваем заказ
-        payment_result = Merchant_api.setToken(merchant_id, token=1)  # оплачу в usdt
+        payment_result = Merchant_api.setToken(merchant_id, token=token)  # оплачу в usdt
+        print(f"Token_id = {token}")
         Checking.check_status_code(result, 201)
 
         print("Ожидание 40 секунд для проведения оплаты в мерчанте")

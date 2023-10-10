@@ -7,7 +7,7 @@ import time
 from utilities.utilities import Instruments
 
 
-class Test_nft_balance():
+class Test_nft_balance:
 
     """Проверка полей в ответе баланса NFT у юзера"""
 
