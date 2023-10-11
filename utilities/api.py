@@ -55,7 +55,7 @@ class Dexart_api:
     """Регистрация по нативной рефке"""
 
     @staticmethod
-    def register_dexart_ref(email, ref):
+    def register_with_mail(email, ref, partner_slug):
         resource = '/api/v1/auth/register'
         url = DEXART + resource
         print(f'URL: {url}')
@@ -64,7 +64,8 @@ class Dexart_api:
         payload = json.dumps({
             "email": email,
             "password": "1qazXSW@",
-            "ref": ref
+            "ref": ref,
+            "partner": partner_slug
         })
         headers = {
             'x-app-lang': 'en',
