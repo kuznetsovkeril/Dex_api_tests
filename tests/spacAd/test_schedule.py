@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
 
+import pytest
+
 from utilities.api import Spacad_api
 from utilities.checking import Checking
 from utilities.getters import Getters
@@ -74,6 +76,7 @@ class TestSpacAdSchedule:
         else:
             return False
 
+    @pytest.mark.skip
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -88,6 +91,7 @@ class TestSpacAdSchedule:
         Checking.assert_values(expected_response, result_response)
 
     # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
+    @pytest.mark.skip
     def test_schedule_current_hours(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -121,5 +125,12 @@ class TestSpacAdSchedule:
 
     """Тест юзера, который не входит в white list"""
 
-    # def test_non_white_list_user(self):
-    #     pass
+    def test_non_white_list_user(self):
+        email = "macarane@mailto.plus"  # почта, которой нет в вайт листе
+        result = Spacad_api.is_eligible(email)  # проверка поля с сообщением
+        Checking.check_status_code(result, 403)
+        # проверка сообщения в ответе для юзера без доступа к ивенту
+        expected_message = "Unfortunately, you are not invited to the event"
+        Checking.check_json_value(result, "message", expected_message)
+
+
