@@ -28,8 +28,7 @@ class TestSpacAdSchedule:
         print(f'UTC Time Now: {current_time}')
         for start_time, end_time in schedule:
             if start_time <= current_time <= end_time:  # из расписания берет время начала и конца и сравнивает с
-                # текущим расписанием я указываю в самом тесте в schedule. Теперь есть вариант подтягивать из апи
-
+                # текущим расписанием, которое берем с бэка - это реальное действующее расписание
                 return True
         # если совпадения нет, то вернуть false вне цикла
         return False
@@ -55,12 +54,13 @@ class TestSpacAdSchedule:
         open_hours_response = Getters.get_json_field_value_0(result, "data")
         if open_hours_response is None:
             return False
-        return True
+        else:
+            return True
 
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
-        # что ожидаем получить. Если по расписанию сейчас закрыто, то вернет False, если открыто True
+        # Что ожидаем получить. Если по расписанию сейчас закрыто, то вернет False, если открыто True
         expected_response = self.is_schedule_open(schedule)
         # что получим, если будем проситься в ивент заданной почтой
         email = "k.test@fexbox.org"  # всегда почта, которая есть в вайт листе
@@ -70,21 +70,27 @@ class TestSpacAdSchedule:
         # просто сравниваем два значения
         Checking.assert_values(expected_response, result_response)
 
-        # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
-        if result_response or expected_response is False:
+    # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
+    def test_current_hours(self):
+        # получаем текущее расписание
+        schedule = self.get_schedule()
+        # Что ожидаем получить. Если по расписанию сейчас закрыто, то вернет False, если открыто True
+        expected_response = self.is_schedule_open(schedule)
+        # что получим, если будем проситься в ивент заданной почтой
+        email = "k.test@fexbox.org"  # всегда почта, которая есть в вайт листе
+        result_response = self.is_eligible(email)  # фактический результат
+        print(f'Actual: {result_response}')
+        print(f'Expected: {expected_response}')
+        if result_response is False and expected_response is False:
             open_hours = False
             assert open_hours == self.if_open_hours(), "Ошибка в текущем расписании"
-            print("Fasle. Расписания на сейчас нет, так как ивент недоступен")
+            print("False. Расписания на сейчас нет, так как ивент недоступен")
         else:
             open_hours = True
             assert open_hours == self.if_open_hours(), "Ошибка в текущем расписании"
             print("True. Расписание не NULL, так как ивент доступен")
 
-
-
     """Тест юзера, который не входит в white list"""
 
     def test_non_white_list_user(self):
         pass
-
-
