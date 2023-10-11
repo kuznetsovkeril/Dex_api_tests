@@ -47,7 +47,7 @@ class TestTopUpBalance:
         print(merchant_id)
 
         # оплачиваем заказ
-        payment_result = Merchant_api.setToken(merchant_id, token=token)  # оплачу в usdt
+        payment_result = Merchant_api.set_token(merchant_id, token=token)  # оплачу в usdt
         print(f"Token_id = {token}")
         Checking.check_status_code(result, 201)
 

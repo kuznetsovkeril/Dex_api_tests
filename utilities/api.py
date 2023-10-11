@@ -335,7 +335,7 @@ class Nft_api:
         })
         print(f'Тело запроса = {payload}')
         result = Http_method.post(url, payload, headers)
-        print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
     @staticmethod
@@ -355,7 +355,7 @@ class Nft_api:
 class Merchant_api:
 
     @staticmethod
-    def setToken(merchant_id, token):
+    def set_token(merchant_id, token):
         resource = "/setToken"
         url = MERCHANT_PROD + resource
         print(f'URL: {url}')
@@ -488,7 +488,7 @@ class Spacad_api:
         url = COINGLUE_DEV + resource
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
-        #print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
     # получение активности расписания на текущий момент, если активно - вернет часы, если нет вернет null
