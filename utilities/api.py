@@ -1,8 +1,15 @@
 from utilities.http_methods import Http_method
-from configuration import DEXART_DEV, COINGLUE_DEV
-from src.secrets import API_KEY_DEV
-from configuration import MERCHANT_PROD
 import json
+
+import os
+
+print(os.environ)
+if os.environ.get("ENVIRONMENT") == "dev":
+    from dev_config import *
+elif os.environ.get("ENVIRONMENT") == "prod":
+    from prod_config import *
+else:
+    raise ValueError("Undefined environment")
 
 
 class Dexart_api:
@@ -11,7 +18,7 @@ class Dexart_api:
     @staticmethod
     def user_dxa_balance(auth_token):
         resource = '/api/v1/user/balance'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         headers = {
             'Content-Type': 'application/json',
@@ -26,7 +33,7 @@ class Dexart_api:
     @staticmethod
     def buy_dxa(auth_token, driver, amount):
         resource = '/api/v1/user/balance/top-up'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         payload_top_up = json.dumps({
             "driver": driver,
@@ -47,7 +54,7 @@ class Dexart_api:
     def check_order(order_id):
         resource = '/api/v1/user/orders/'
         headers = {'Content-Type': 'application/json'}
-        url = DEXART_DEV + resource + str(order_id)
+        url = DEXART + resource + str(order_id)
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
@@ -58,7 +65,7 @@ class Dexart_api:
     @staticmethod
     def register_dexart_ref(email, ref):
         resource = '/api/v1/auth/register'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
 
         """Тело запроса"""
@@ -80,7 +87,7 @@ class Dexart_api:
     @staticmethod
     def user_referral_info(auth_token):
         resource = '/api/v1/referral/user'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         """Тело запроса"""
         payload = {}
@@ -99,7 +106,7 @@ class Dexart_api:
     @staticmethod
     def dxa_usd_rate():
         resource = '/api/v1/dxa/rate'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         headers = {
             'Content-Type': 'application/json',
@@ -114,7 +121,7 @@ class Dexart_api:
     @staticmethod
     def create_transaction(currency_id, user_id, type_id, status_id, dxa_amount):
         resource = '/api/v1/transactions'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
 
         """Тело запроса"""
@@ -134,7 +141,7 @@ class Dexart_api:
         })
         headers = {
             'Content-Type': 'application/json',
-            'api-key': API_KEY_DEV
+            'api-key': API_KEY
         }
         result = Http_method.post(url, payload, headers)
         print(f'Response: {result.text}')
@@ -145,7 +152,7 @@ class Dexart_api:
     @staticmethod
     def user_transaction(auth_token):
         resource = '/api/v1/user/transactions'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         headers = {
             'Content-Type': 'application/json',
@@ -159,7 +166,7 @@ class Dexart_api:
     @staticmethod
     def get_region_parcels(region):
         resource = f'/api/v1/maps/districts/{region}/parcels'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         headers = {}
         result = Http_method.get(url, headers)
@@ -170,7 +177,7 @@ class Dexart_api:
     @staticmethod
     def add_parcel_to_cart(auth_token, parcel_id):
         resource = '/api/v1/user/cart'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         payload = json.dumps({"parcel_id": parcel_id})
         headers = {
@@ -187,7 +194,7 @@ class Dexart_api:
     @staticmethod
     def buy_parcel(auth_token, driver, email):
         resource = '/api/v1/user/cart/buy'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         payload = json.dumps({
             "driver": driver,
@@ -209,7 +216,7 @@ class Dexart_api:
     @staticmethod
     def withdraw_dxa(auth_token, amount, code, bsc_address):
         resource = '/api/v1/user/balance/withdrawal'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         payload = json.dumps({
             "amount": amount,
@@ -230,10 +237,10 @@ class Dexart_api:
     @staticmethod
     def royalties_statistics():
         resource = '/api/v1/app/gravity/statistics'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         payload = {}
-        headers = {"api-key": API_KEY_DEV}
+        headers = {"api-key": API_KEY}
         print(f'URL: {url}')
         result = Http_method.post(url, payload, headers)
         print(f'Response: {result.text}')
@@ -242,7 +249,7 @@ class Dexart_api:
     @staticmethod
     def buy_booster(auth_token, booster_id, amount, room_id):
         resource = '/api/v1/gravity-guys/boosters/set'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         # room_id = Air Test or Pool
         # booster_id = "id": 6 - price 100 DXA, "id": 3 - price 5 DXA
         payload = {'booster_id': booster_id,
@@ -259,7 +266,7 @@ class Dexart_api:
     @staticmethod
     def ticket_buy(auth_token, room_id):
         resource = '/api/v1/gravity-guys/records/user-record/buy-tiket'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         # room_id = Air Test or Pool
         # price = 1 DXA
         payload = {'room_uid': room_id}
@@ -274,10 +281,10 @@ class Dexart_api:
     @staticmethod
     def give_royalties():
         resource = '/api/v1/app/give/royalties'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         payload = {}
         headers = {
-            'api-key': API_KEY_DEV
+            'api-key': API_KEY
         }
         print(f'URL: {url}')
         result = Http_method.post(url, payload, headers)
@@ -294,7 +301,7 @@ class Nft_api:
         # param - параметр в запросе
         resource = '/api/v1/nft/catalog' + param
         headers = {'Content-Type': 'application/json'}
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
@@ -303,7 +310,7 @@ class Nft_api:
     @staticmethod
     def buy_nft(auth_token, nft_id, amount, pay_method):
         resource = '/api/v1/nft/inventory'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         headers = {
             'Content-Type': 'application/json',
@@ -323,7 +330,7 @@ class Nft_api:
     @staticmethod
     def buy_nft_with_email(nft_id, amount, pay_method, email):
         resource = '/api/v1/nft/inventory'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         headers = {'Content-Type': 'application/json'}
         payload = json.dumps({
@@ -341,7 +348,7 @@ class Nft_api:
     @staticmethod
     def user_nft_balance(auth_token):
         resource = '/api/v1/nft/inventory'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         headers = {
             'Content-Type': 'application/json',
@@ -425,7 +432,7 @@ class Energy_api:
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + auth_token
         }
-        url = DEXART_DEV + resource
+        url = DEXART + resource
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
@@ -436,7 +443,7 @@ class Energy_api:
     @staticmethod
     def activate_all_energy(auth_token):
         resource = '/api/v1/user/batteries/activate'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         payload_top_up = {}
         headers = {
@@ -453,7 +460,7 @@ class Energy_api:
     @staticmethod
     def activate_one_energy(auth_token, energy_id):
         resource = f'/api/v1/user/batteries/{energy_id}/activate'
-        url = DEXART_DEV + resource
+        url = DEXART + resource
 
         payload_top_up = {}
         headers = {
@@ -474,7 +481,7 @@ class Spacad_api:
     def is_eligible(email):
         resource = f'/api/v1/coinglue/is-eligible?email={email}'
         headers = {'Content-Type': 'application/json'}
-        url = COINGLUE_DEV + resource
+        url = COINGLUE + resource
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
@@ -485,7 +492,7 @@ class Spacad_api:
     def get_event_schedule():
         resource = f'/api/v1/coinglue/hours/current?all=1'
         headers = {'Content-Type': 'application/json'}
-        url = COINGLUE_DEV + resource
+        url = COINGLUE + resource
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
         # print(f'Response: {result.text}')
@@ -496,7 +503,7 @@ class Spacad_api:
     def if_event_open_hours():
         resource = f'/api/v1/coinglue/hours/current'
         headers = {'Content-Type': 'application/json'}
-        url = COINGLUE_DEV + resource
+        url = COINGLUE + resource
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')

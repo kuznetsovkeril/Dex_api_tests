@@ -1,6 +1,6 @@
 from utilities.api import Nft_api
 from utilities.checking import Checking
-from src.auth_tokens import AUTH_DXA_USER
+from dev_config import AUTH_DXA_USER
 import json
 import time
 

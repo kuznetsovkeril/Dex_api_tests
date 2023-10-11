@@ -3,8 +3,7 @@ import pytest
 from utilities.api import Dexart_api
 from utilities.checking import Checking
 from utilities.getters import Getters
-from src.auth_tokens import AUTH_BALANCE_PAGE_USER, AUTH_OTON_USER_BALANCE, AUTH_ATON_USER_BALANCE, \
-    AUTH_SPACAD_USER_BALANCE
+from dev_config import AUTH_BALANCE_PAGE_USER, AUTH_OTON_USER_BALANCE, AUTH_ATON_USER_BALANCE, AUTH_SPACAD_USER_BALANCE
 
 
 class Test_user_dxa_balance:

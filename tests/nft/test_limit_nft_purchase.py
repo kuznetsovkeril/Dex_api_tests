@@ -1,6 +1,6 @@
 from utilities.api import Nft_api
 from utilities.checking import Checking
-from src.auth_tokens import AUTH_DXA_USER
+from dev_config import AUTH_DXA_USER
 
 """Покупка NFT (Gravity NFT)""" # проверяем метод покупки NFT актуален и для других нфт, цена 3.5
 

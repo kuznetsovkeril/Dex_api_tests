@@ -5,7 +5,7 @@ import pytest
 from utilities.api import Dexart_api
 from utilities.checking import Checking
 import datetime
-from src.auth_tokens import AUTH_BUY_GG_ITEMS
+from dev_config import AUTH_BUY_GG_ITEMS
 from utilities.getters import Getters
 
 

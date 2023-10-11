@@ -5,7 +5,7 @@ import pytest
 
 from utilities.api import Dexart_api, Nft_api
 from utilities.checking import Checking
-from src.auth_tokens import AUTH_BUY_GG_ITEMS, AUTH_ONE_GRAVITY_NFT, AUTH_BONUS_NFT, AUTH_KIRTEST, AUTH_NO_GG_NFT
+from dev_config import AUTH_BUY_GG_ITEMS, AUTH_ONE_GRAVITY_NFT, AUTH_BONUS_NFT, AUTH_KIRTEST, AUTH_NO_GG_NFT
 from utilities.getters import Getters
 from utilities.utilities import Instruments
 

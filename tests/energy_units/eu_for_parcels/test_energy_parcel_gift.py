@@ -6,7 +6,7 @@ from utilities.api import Dexart_api
 from utilities.api import Energy_api
 from utilities.utilities import Instruments
 from utilities.checking import Checking
-from src.auth_tokens import AUTH_EU_GIFTS
+from dev_config import AUTH_EU_GIFTS
 from utilities.getters import Getters
 
 
