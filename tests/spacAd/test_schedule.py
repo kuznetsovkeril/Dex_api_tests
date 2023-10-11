@@ -76,7 +76,6 @@ class TestSpacAdSchedule:
         else:
             return False
 
-    @pytest.mark.skip
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -91,7 +90,6 @@ class TestSpacAdSchedule:
         Checking.assert_values(expected_response, result_response)
 
     # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
-    @pytest.mark.skip
     def test_schedule_current_hours(self):
         # получаем текущее расписание
         schedule = self.get_schedule()

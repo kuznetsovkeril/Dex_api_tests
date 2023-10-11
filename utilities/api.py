@@ -321,6 +321,24 @@ class Nft_api:
         return result
 
     @staticmethod
+    def buy_nft_with_email(nft_id, amount, pay_method, email):
+        resource = '/api/v1/nft/inventory'
+        url = DEXART_DEV + resource
+        print(f'URL: {url}')
+        headers = {'Content-Type': 'application/json'}
+        payload = json.dumps({
+            "id": nft_id,
+            "source": "web",
+            "amount": amount,
+            "driver": pay_method,
+            "email": email
+        })
+        print(f'Тело запроса = {payload}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    @staticmethod
     def user_nft_balance(auth_token):
         resource = '/api/v1/nft/inventory'
         url = DEXART_DEV + resource
