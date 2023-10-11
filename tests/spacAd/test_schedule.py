@@ -76,6 +76,8 @@ class TestSpacAdSchedule:
         else:
             return False
 
+    # проверяется как открытый ивент, так и закрытый. Если на момент проверки ивент закрыт,
+    # то проверяется кейс для закрытого ивента и наоборот
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -90,6 +92,7 @@ class TestSpacAdSchedule:
         Checking.assert_values(expected_response, result_response)
 
     # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
+    # аналогично как и в первом тесте, если закрыт, то кейс проверяется для закрытого ивента
     def test_schedule_current_hours(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
