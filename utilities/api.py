@@ -1,15 +1,7 @@
 from utilities.http_methods import Http_method
 import json
 
-import os
-
-print(os.environ)
-if os.environ.get("ENVIRONMENT") == "dev":
-    from dev_config import *
-elif os.environ.get("ENVIRONMENT") == "prod":
-    from prod_config import *
-else:
-    raise ValueError("Undefined environment")
+from config_check import *
 
 
 class Dexart_api:
