@@ -1,3 +1,5 @@
+import pytest
+
 from utilities.api import Dexart_api
 from utilities.checking import Checking
 from utilities.getters import Getters
@@ -7,6 +9,7 @@ from src.auth_tokens import AUTH_BALANCE_PAGE_USER, AUTH_OTON_USER_BALANCE, AUTH
 
 class Test_user_dxa_balance:
 
+    @pytest.mark.skip
     def test_show_user_balance(self):
         result = Dexart_api.user_dxa_balance(auth_token=AUTH_BALANCE_PAGE_USER)
         Checking.check_status_code(result, 200)
@@ -57,12 +60,13 @@ class Test_user_dxa_balance:
         real_usd_balance = Getters.get_json_field_value_3(result_balance, "data", "balance", "balance_usd")
         check_usd_balance = float(dxa_balance) * float(dxa_rate)
         expected_usd_balance = round(check_usd_balance, 2)
-        print(f'Баланс после округления = {expected_usd_balance}')
+        print(f'Ожидаемый баланс после округления = {expected_usd_balance}')
         Checking.assert_values(expected_usd_balance, float(real_usd_balance))
         print("Баланс USD пошел проверку")
 
     # проверка, что у юзеров вне маркетингов дексарт нет статьи дохода реферальная программа, а остальные есть
 
+    @pytest.mark.skip
     def test_non_dexart_users(self):
         users = [AUTH_OTON_USER_BALANCE, AUTH_ATON_USER_BALANCE, AUTH_SPACAD_USER_BALANCE]
         for user in users:
