@@ -78,7 +78,7 @@ class Test_nft_balance:
         # новый баланс должен быть такой
 
         expected_new_nft_balance = user_nft_balance + amount
-        print(f'NFT баланс после покупки: {expected_new_nft_balance}')
+        print(f'Ожидаемый NFT баланс после покупки: {expected_new_nft_balance}')
 
         # проверяем, что баланс действительно увеличился на кол-во покупаемых NFT
 
