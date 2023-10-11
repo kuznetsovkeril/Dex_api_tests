@@ -18,7 +18,7 @@ def register(ref_id, slug):
     yield auth_token  # возвращает токен авторизации перед каждым тестом
 
 
-class TestRegisterRefDexart:
+class TestRegister:
     """Регистрация пользователя в Dexart в разных реф программах"""
 
     # успешная регистрация в нативной рефке с корректным ref_id, без рефки, под неверной рефкой
