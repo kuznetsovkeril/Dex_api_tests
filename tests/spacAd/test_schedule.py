@@ -57,6 +57,23 @@ class TestSpacAdSchedule:
         else:
             return True
 
+    # метод проверки, что текущие часы расписания верные, если расписание открыто
+    @staticmethod
+    def check_current_hours():
+        result = Spacad_api.if_event_open_hours()  # запрашиваю текущее время
+        Checking.check_status_code(result, 200)
+        current_time = datetime.utcnow().strftime("%H:%M:%S")  # получаю текущее время в UTC, тк с бэка данные в UTC
+        print(f'UTC Time Now: {current_time}')
+        print(f'Получения текущих часов открытия:')
+        current_start_time = Getters.get_json_field_value_2(result, "data",
+                                                            "start")  # получаю начало для текущего ивента
+        current_end_time = Getters.get_json_field_value_2(result, "data", "end")  # получаю конец для текущего ивента
+        # если настоящее время находится в рамках текущего расписания -> True, иначе False
+        if current_start_time <= current_time <= current_end_time:
+            return True
+        else:
+            return False
+
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -71,7 +88,7 @@ class TestSpacAdSchedule:
         Checking.assert_values(expected_response, result_response)
 
     # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
-    def test_current_hours(self):
+    def test_schedule_current_hours(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
         # Что ожидаем получить. Если по расписанию сейчас закрыто, то вернет False, если открыто True
@@ -83,14 +100,26 @@ class TestSpacAdSchedule:
         print(f'Expected: {expected_response}')
         if result_response is False and expected_response is False:
             open_hours = False
+            print(f'Статус открытия текущего расписания: {self.if_open_hours()}')
             assert open_hours == self.if_open_hours(), "Ошибка в текущем расписании"
             print("False. Расписания на сейчас нет, так как ивент недоступен")
+        elif result_response != expected_response:
+            result = Spacad_api.if_event_open_hours()
+            open_hours = Getters.get_json_field_value_0(result, "data")
+            print(f'Текущее расписание: {open_hours}')
+            raise ValueError("Ошибка в расписании! Кейс BROKEN")
         else:
             open_hours = True
+            print(f"Статус открытия текущего расписания: {self.if_open_hours()}")
             assert open_hours == self.if_open_hours(), "Ошибка в текущем расписании"
             print("True. Расписание не NULL, так как ивент доступен")
+            # проверить, что в случае открытия расписания текущее время находится в рамках этих часов
+            current_hours = self.check_current_hours()  # заранее написанный метод проверки часов открытия, см выше
+            print(f"Статус проверки текущих часов открытия: {current_hours}")
+            assert current_hours is True, "Неверное время текущего расписания"
+            print("Время текущего расписания верное.")
 
     """Тест юзера, который не входит в white list"""
 
-    def test_non_white_list_user(self):
-        pass
+    # def test_non_white_list_user(self):
+    #     pass
