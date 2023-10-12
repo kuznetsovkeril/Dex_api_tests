@@ -161,7 +161,7 @@ class TestEnergyGift:
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
 
-    def test_gift_eu_for_all_parcels(self, wait_between_tests):  # wait_between - фикстура из конфтеста
+    def test_gift_eu_for_all_parcels(self, wait_between_tests):  # wait_between - фикстура из конфтеста для ожидания
         # активация пакетов перед запуском тестов
         self.activate_energy(AUTH_EU_GIFTS)
         time.sleep(2)
