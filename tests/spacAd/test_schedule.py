@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 import pytest
-
+from config_check import *
 from utilities.api import Spacad_api
 from utilities.checking import Checking
 from utilities.getters import Getters
@@ -84,8 +84,7 @@ class TestSpacAdSchedule:
         # Что ожидаем получить. Если по расписанию сейчас закрыто, то вернет False, если открыто True
         expected_response = self.is_schedule_open(schedule)
         # что получим, если будем проситься в ивент заданной почтой
-        email = "k.test@fexbox.org"  # всегда почта, которая есть в вайт листе
-        result_response = self.is_eligible(email)  # фактический результат
+        result_response = self.is_eligible(EMAIL_SPACAD_WHITELISTED)  # фактический результат
         print(f'Actual: {result_response}')
         print(f'Expected: {expected_response}')
         # просто сравниваем два значения
@@ -99,8 +98,7 @@ class TestSpacAdSchedule:
         # Что ожидаем получить. Если по расписанию сейчас закрыто, то вернет False, если открыто True
         expected_response = self.is_schedule_open(schedule)
         # что получим, если будем проситься в ивент заданной почтой
-        email = "k.test@fexbox.org"  # всегда почта, которая есть в вайт листе
-        result_response = self.is_eligible(email)  # фактический результат
+        result_response = self.is_eligible(EMAIL_SPACAD_WHITELISTED)  # фактический результат
         print(f'Actual: {result_response}')
         print(f'Expected: {expected_response}')
         if result_response is False and expected_response is False:
@@ -127,8 +125,7 @@ class TestSpacAdSchedule:
     """Тест юзера, который не входит в white list"""
 
     def test_non_white_list_user(self):
-        email = "macarane@mailto.plus"  # почта, которой нет в вайт листе
-        result = Spacad_api.is_eligible(email)  # проверка поля с сообщением
+        result = Spacad_api.is_eligible(EMAIL_SPACAD_NON_WHITELISTED)  # проверка поля с сообщением
         Checking.check_status_code(result, 403)
         # проверка сообщения в ответе для юзера без доступа к ивенту
         expected_message = "Unfortunately, you are not invited to the event"
