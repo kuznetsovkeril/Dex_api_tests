@@ -40,6 +40,21 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    """Получение информации по юзеру"""
+    @staticmethod
+    def user_info(auth_token):
+        resource = '/api/v1/user'
+        url = DEXART + resource
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        print(f'URL: {url}')
+        print(f'All headers: {headers}')
+        result = Http_method.get(url, headers)
+        print(f'Response: {result.text}')
+        return result
+
     """Проверка заказа по id заказа"""
 
     @staticmethod
@@ -52,7 +67,7 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
-    """Регистрация по нативной рефке"""
+    """Регистрация по рефке"""
 
     @staticmethod
     def register_with_mail(email, ref, partner_slug):
@@ -75,7 +90,7 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
-    """Информация по юзеру"""
+    """Информация по юзеру в реф программе дексарт"""
 
     @staticmethod
     def user_referral_info(auth_token):
