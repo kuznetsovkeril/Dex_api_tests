@@ -125,6 +125,7 @@ class TestSpacAdSchedule:
     """Тест юзера, который не входит в white list"""
 
     def test_non_white_list_user(self):
+        print(EMAIL_SPACAD_NON_WHITELISTED) # проверяемая почта
         result = Spacad_api.is_eligible(EMAIL_SPACAD_NON_WHITELISTED)  # проверка поля с сообщением
         Checking.check_status_code(result, 403)
         # проверка сообщения в ответе для юзера без доступа к ивенту

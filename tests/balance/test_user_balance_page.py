@@ -3,12 +3,11 @@ import pytest
 from utilities.api import Dexart_api
 from utilities.checking import Checking
 from utilities.getters import Getters
-from dev_config import AUTH_BALANCE_PAGE_USER, AUTH_OTON_USER_BALANCE, AUTH_ATON_USER_BALANCE, AUTH_SPACAD_USER_BALANCE
+from dev_config import *
 
 
 class Test_user_dxa_balance:
 
-    @pytest.mark.skip
     def test_show_user_balance(self):
         result = Dexart_api.user_dxa_balance(auth_token=AUTH_BALANCE_PAGE_USER)
         Checking.check_status_code(result, 200)
@@ -25,7 +24,7 @@ class Test_user_dxa_balance:
             income_item_name = Getters.get_json_field_value(result, "data", "income", index, "name")
             print(income_item_name)
             expected_name = (
-            "Energy Units", "Events", "Gravity NFT royalties", "Referral reward", "Staking income", "Other")
+                "Energy Units", "Events", "Gravity NFT royalties", "Referral reward", "Staking income", "Other")
             assert income_item_name in expected_name, f"Название '{income_item_name}' не соответствует ожиданиям у юзера {AUTH_BALANCE_PAGE_USER}."
             print(f"Проверка для названия '{income_item_name}' выполнена.")
 
@@ -65,9 +64,8 @@ class Test_user_dxa_balance:
 
     # проверка, что у юзеров вне маркетингов дексарт нет статьи дохода реферальная программа, а остальные есть
 
-    @pytest.mark.skip
     def test_non_dexart_users(self):
-        users = [AUTH_OTON_USER_BALANCE, AUTH_ATON_USER_BALANCE, AUTH_SPACAD_USER_BALANCE]
+        users = [AUTH_OTON_USER, AUTH_ATON_USER, AUTH_SPACAD_USER]
         for user in users:
             result = Dexart_api.user_dxa_balance(auth_token=user)
             Checking.check_status_code(result, 200)
