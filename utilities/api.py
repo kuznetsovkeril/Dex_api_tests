@@ -372,7 +372,7 @@ class Merchant_api:
     @staticmethod
     def set_token(merchant_id, token):
         resource = "/setToken"
-        url = MERCHANT_PROD + resource
+        url = MERCHANT + resource
         print(f'URL: {url}')
 
         payload = f'link={merchant_id}&token={token}'
