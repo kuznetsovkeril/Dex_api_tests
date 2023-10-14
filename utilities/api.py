@@ -109,6 +109,27 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    @staticmethod
+    def user_branch(auth_token, email):
+        resource = '/api/v1/referral/branch'
+        url = DEXART + resource
+
+        """Тело запроса"""
+        payload = json.dumps({
+            "email": email
+        })
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        print(f'URL: {url}')
+        print(f'All headers: {headers}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    """Получение реферального дерева юзера"""
+
     """Получение курса токена DXA к USD"""
 
     @staticmethod
