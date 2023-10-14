@@ -59,16 +59,17 @@ class TestDexartReferral:
 
     # проверка наличия нужных полей в ответе ветки реф юзера:
     # юзера в моей ветке 1, 2, 3 уровни, вне моей ветки, самого себя, топа?
-    @pytest.mark.parametrize("auth, email, status_code, test_name", [(AUTH_REF_DEXART_1, "testrefka8@fexbox.org", 200, "Test found my level 1 user")])
-                             # [(AUTH_REF_DEXART_1, "testrefka9@fexbox.org", 200), "Test found my level 2 user"],
-                             # [(AUTH_REF_DEXART_1, "refkat18@fexbox.org", 200), "Test found my level 4 user"],
-                             # [(AUTH_REF_DEXART_1, "testrefka@fexbox.org", 200), "Test found my sponsor"],
-                             # [(AUTH_REF_DEXART_1, "disik@mailto.plus", 200), "Test found out of my branch"],
-                             # [(None, "testrefka@fexbox.org", 401), "Test found branch without auth"],
-                             # [(AUTH_REF_DEXART_1, "testrefka.com", 422), "Test found branch with invalid mail"],
-                             # [(AUTH_REF_DEXART_1, " ", 422), "Test found branch with empty mail"])
+    @pytest.mark.parametrize("auth, email, status_code, test_name",
+                             [(AUTH_REF_DEXART_1, "testrefka8@fexbox.org", 200, "Test found my level 1 user"),
+                              (AUTH_REF_DEXART_1, "testrefka9@fexbox.org", 200, "Test found my level 2 user"),
+                              (AUTH_REF_DEXART_1, "refkat18@fexbox.org", 200, "Test found my level 4 user"),
+                              (AUTH_REF_DEXART_1, "testrefka@fexbox.org", 200, "Test found my sponsor"),
+                              (AUTH_REF_DEXART_1, "disik@mailto.plus", 200, "Test found out of my branch"),
+                              (None, "testrefka@fexbox.org", 401, "Test found branch without auth"),
+                              (AUTH_REF_DEXART_1, "testrefka.com", 422, "Test found branch with invalid mail"),
+                              (AUTH_REF_DEXART_1, " ", 422, "Test found branch with empty mail")])
     def test_user_branch_fields(self, user_branch, auth, email, status_code, test_name):
-        current_user_email = user_branch["current_user"]["email"] #
+        current_user_email = user_branch["current_user"]["email"]  #
         print(f'Current user email: {current_user_email}')
         if current_user_email is not False:
 
