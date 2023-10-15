@@ -19,15 +19,14 @@ def user_branch(auth, email, status_code):
     result = Dexart_api.user_branch(auth, email)
     Checking.check_status_code(result, status_code)
     result_json = json.loads(result.text)
-    result_data = result_json["data"]  # получаем json массива data для парсинга всех полей
+    result_data = result_json  # получаем json для парсинга всех полей
     yield result_data
 
 
-class TestDexartReferral:
+class TestDexartReferralPage:
 
     @pytest.mark.parametrize("auth", [AUTH_REF_DEXART])
     def test_referral_page_fields(self, referral_page, auth):
-
         # проверка полей во всем ответе
         fields = list(referral_page["data"])
         expected_fields = ['id', 'email', 'is_assistent', 'account_type', 'referral_link', 'ref', 'ref_count',
@@ -57,43 +56,89 @@ class TestDexartReferral:
 
         print("Реф программа не доступна юзерам вне маркетинга дексарт")
 
-    # проверка наличия нужных полей в ответе ветки реф юзера:
-    # юзера в моей ветке 1, 2, 3 уровни, вне моей ветки, самого себя, топа?
+    # проверка поиска юзера в ветке по позитивным сценариям
     @pytest.mark.parametrize("auth, email, status_code, test_name",
                              [(AUTH_REF_DEXART_1, "testrefka8@fexbox.org", 200, "Test found my level 1 user"),
                               (AUTH_REF_DEXART_1, "testrefka9@fexbox.org", 200, "Test found my level 2 user"),
-                              (AUTH_REF_DEXART_1, "refkat18@fexbox.org", 200, "Test found my level 4 user"),
+                              (AUTH_REF_DEXART_1, "refkat18@fexbox.org", 200, "Test found user without branch"),
                               (AUTH_REF_DEXART_1, "testrefka@fexbox.org", 200, "Test found my sponsor"),
-                              (AUTH_REF_DEXART_1, "disik@mailto.plus", 200, "Test found out of my branch"),
-                              (None, "testrefka@fexbox.org", 401, "Test found branch without auth"),
-                              (AUTH_REF_DEXART_1, "testrefka.com", 422, "Test found branch with invalid mail"),
-                              (AUTH_REF_DEXART_1, " ", 422, "Test found branch with empty mail")])
-    def test_user_branch_fields(self, user_branch, auth, email, status_code, test_name):
-        current_user_email = user_branch["current_user"]["email"]  #
+                              (AUTH_REF_DEXART_1, "disik@mailto.plus", 200, "Test found out of my branch")])
+    def test_search_user_in_branch_positive(self, user_branch, auth, email, status_code, test_name):
+        # проверка, что current_user = искомому email
+        current_user_email = user_branch["data"]["current_user"]["email"]  # получаем почту из ответа
         print(f'Current user email: {current_user_email}')
-        if current_user_email is not False:
+        Checking.assert_values(email, current_user_email)
 
-            # проверка полей во всем ответе
-            data_fields = list(user_branch)
-            print(data_fields)
-            # expected_fields = ['id', 'email', 'is_assistent', 'account_type', 'referral_link', 'ref', 'ref_count',
-            #                    'percent', 'turnover',
-            #                    'income', 'ref_income']
-            # Checking.assert_values(expected_fields, fields)
-            #
-            # # проверка наличия нужных полей искомого юзера
-            # fields_ref = list(referral_page["data"]["ref"])
-            # expected_fields = ['email', 'id', 'account_type']
-            # Checking.assert_values(expected_fields, fields_ref)
+        # проверка наличия необходимых полей в ответе
+        data_fields = list(user_branch["data"])
+        print(f'Полученные поля: {data_fields}')
+        expected_fields = ['current_user', 'branch', 'parents']
+        Checking.assert_values(expected_fields, data_fields)
 
-            # проверка наличия нужных полей у родителей
-            branch_fields = list(user_branch["branch"][0])
-            print(branch_fields)
-            # expected_fields = ['total', 'first_line']
-            # Checking.assert_values(expected_fields, fields_ref_count)
-            #
-            # print("Необходимые поля на странице реф программы присутствуют.")
+        # проверка полей в блоке искомого юзера
+        current_user_fields = list(user_branch["data"]["current_user"])
+        print(f'Полученные поля: {current_user_fields}')
+        expected_fields = ['user_id', 'email']
+        Checking.assert_values(expected_fields, current_user_fields)
 
-            # проверка наличия нужных полей
-        else:
-            print('Юзер не найден в маркетинге Dexart или получена другая ошибка.')
+    # проверка поиска несуществующего юзера
+    @pytest.mark.parametrize("auth, email, status_code, test_name",
+                             [(AUTH_REF_DEXART_1, "nonexistmail@gmail.coim", 200, "Test found non-exist user")])
+    def test_search_nonexistent_user(self, user_branch, auth, email, status_code, test_name):
+        # проверка, что current_user =  False
+        current_user_email = user_branch["data"]["current_user"]["email"]  # получаем почту из ответа
+        print(f'Current user email: {current_user_email}')
+        Checking.assert_values(False, current_user_email)  # проверяем, что он почта = false
+
+    # проверка негативных сценариев
+    @pytest.mark.parametrize("auth, email, status_code, expected_message, test_name",
+                             [(" ", "testrefka@fexbox.org", 401, "Unauthorized", "Test found branch without auth"),
+                              (AUTH_REF_DEXART_1, "testrefka.com", 422, "The email must be a valid email address.",
+                               "Test found branch with invalid mail"),
+                              (AUTH_REF_DEXART_1, " ", 422, "The email field is required.",
+                               "Test found branch with empty mail")])
+    def test_search_user_in_branch_negative(self, user_branch, auth, email, status_code, expected_message, test_name):
+        get_message = user_branch["message"]
+        print(f'We got message: {get_message}')
+        Checking.assert_values(expected_message, get_message)
+
+    # проверка наличия всех поля у родителей и юзеров в ветке
+    @pytest.mark.parametrize("auth, email, status_code, test_name",
+                             [(AUTH_REF_DEXART_1, "maiL@mail.rf", 200, "Test user with branch")])
+    def test_user_branch_fields(self, user_branch, auth, email, status_code, test_name):
+        # проверка наличия нужных полей в ветке искомого юзера
+        branch_fields = list(user_branch["data"]["branch"][0])
+        print(f'Polya: {branch_fields}')
+        expected_fields = ['id', 'email', 'level', 'is_assistent', 'percent', 'turnover', 'income', 'ref_income', 'from_percent', 'to_percent', 'ref_count']
+        Checking.assert_values(expected_fields, branch_fields)
+
+        # проверка наличия нужных полей у родителей юзера
+        parents_fields = list(user_branch["data"]["parents"][0])
+        print(f'Поля: {branch_fields}')
+        expected_fields = ['id', 'email', 'level', 'is_assistent', 'percent', 'turnover', 'income', 'ref_income',
+                           'from_percent', 'to_percent', 'ref_count']
+        Checking.assert_values(expected_fields, parents_fields)
+
+    # проверка полей, если у юзера нет нижестоящих рефералов
+    @pytest.mark.parametrize("auth, email, status_code, test_name",
+                             [(AUTH_REF_DEXART_1, "refkat18@fexbox.org", 200, "Test found fields empty branch")])
+    def test_user_empty_branch_fields(self, user_branch, auth, email, status_code, test_name):
+        # проверка наличия нужных полей в ветке искомого юзера
+        branch_fields = list(user_branch["data"]["branch"])
+        print(f'Поля: {branch_fields}')
+        expected_fields = []
+        Checking.assert_values(expected_fields, branch_fields)
+
+
+
+    #def test_user_parents_branch_fields(self, user_branch, auth, email, status_code, expected_fields, test_name):
+
+
+
+
+        # проверка наличия нужных полей у родителей
+        # parent_fields = list(user_branch["data"]["parents"][0])
+        # print(branch_fields)
+        # expected_fields = ['total', 'first_line']
+        # Checking.assert_values(expected_fields, parent_fields)
+        # print("Необходимые поля на странице реф программы присутствуют.")
