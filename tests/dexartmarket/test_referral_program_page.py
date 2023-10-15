@@ -19,8 +19,7 @@ def user_branch(auth, email, status_code):
     result = Dexart_api.user_branch(auth, email)
     Checking.check_status_code(result, status_code)
     result_json = json.loads(result.text)
-    result_data = result_json  # получаем json для парсинга всех полей
-    yield result_data
+    yield result_json
 
 
 class TestDexartReferralPage:
@@ -83,7 +82,7 @@ class TestDexartReferralPage:
 
     # проверка поиска несуществующего юзера
     @pytest.mark.parametrize("auth, email, status_code, test_name",
-                             [(AUTH_REF_DEXART_1, "nonexistmail@gmail.coim", 200, "Test found non-exist user")])
+                             [(AUTH_REF_DEXART_1, "nonexistmail@gmail.com", 200, "Test found non-exist user")])
     def test_search_nonexistent_user(self, user_branch, auth, email, status_code, test_name):
         # проверка, что current_user =  False
         current_user_email = user_branch["data"]["current_user"]["email"]  # получаем почту из ответа
@@ -128,17 +127,3 @@ class TestDexartReferralPage:
         print(f'Поля: {branch_fields}')
         expected_fields = []
         Checking.assert_values(expected_fields, branch_fields)
-
-
-
-    #def test_user_parents_branch_fields(self, user_branch, auth, email, status_code, expected_fields, test_name):
-
-
-
-
-        # проверка наличия нужных полей у родителей
-        # parent_fields = list(user_branch["data"]["parents"][0])
-        # print(branch_fields)
-        # expected_fields = ['total', 'first_line']
-        # Checking.assert_values(expected_fields, parent_fields)
-        # print("Необходимые поля на странице реф программы присутствуют.")
