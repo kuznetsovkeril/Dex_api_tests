@@ -1,7 +1,6 @@
 import json
 from datetime import datetime
 
-import pytest
 from config_check import *
 from utilities.api import Spacad_api
 from utilities.checking import Checking
