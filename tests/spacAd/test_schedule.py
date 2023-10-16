@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
 
+import pytest
+
 from config_check import *
 from utilities.api import Spacad_api
 from utilities.checking import Checking
@@ -77,6 +79,8 @@ class TestSpacAdSchedule:
 
     # проверяется как открытый ивент, так и закрытый. Если на момент проверки ивент закрыт,
     # то проверяется кейс для закрытого ивента и наоборот
+
+    @pytest.mark.prod
     def test_spacad_schedule(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -91,6 +95,7 @@ class TestSpacAdSchedule:
 
     # проверка, что если расписание открыто, то open_hours не Null, если закрыто то Null (None)
     # аналогично как и в первом тесте, если закрыт, то кейс проверяется для закрытого ивента
+    @pytest.mark.prod
     def test_schedule_current_hours(self):
         # получаем текущее расписание
         schedule = self.get_schedule()
@@ -123,12 +128,11 @@ class TestSpacAdSchedule:
 
     """Тест юзера, который не входит в white list"""
 
+    @pytest.mark.prod
     def test_non_white_list_user(self):
-        print(EMAIL_SPACAD_NON_WHITELISTED) # проверяемая почта
+        print(EMAIL_SPACAD_NON_WHITELISTED)  # проверяемая почта
         result = Spacad_api.is_eligible(EMAIL_SPACAD_NON_WHITELISTED)  # проверка поля с сообщением
         Checking.check_status_code(result, 403)
         # проверка сообщения в ответе для юзера без доступа к ивенту
         expected_message = "Unfortunately, you are not invited to the event"
         Checking.check_json_value(result, "message", expected_message)
-
-

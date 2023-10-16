@@ -24,6 +24,7 @@ def user_branch(auth, email, status_code):
 
 class TestDexartReferralPage:
 
+    # проверка личной страницы в реф программе
     @pytest.mark.parametrize("auth", [AUTH_REF_DEXART])
     def test_referral_page_fields(self, referral_page, auth):
         # проверка полей во всем ответе
@@ -57,11 +58,11 @@ class TestDexartReferralPage:
 
     # проверка поиска юзера в ветке по позитивным сценариям
     @pytest.mark.parametrize("auth, email, status_code, test_name",
-                             [(AUTH_REF_DEXART_1, "testrefka8@fexbox.org", 200, "Test found my level 1 user"),
-                              (AUTH_REF_DEXART_1, "testrefka9@fexbox.org", 200, "Test found my level 2 user"),
-                              (AUTH_REF_DEXART_1, "refkat18@fexbox.org", 200, "Test found user without branch"),
-                              (AUTH_REF_DEXART_1, "testrefka@fexbox.org", 200, "Test found my sponsor"),
-                              (AUTH_REF_DEXART_1, "disik@mailto.plus", 200, "Test found out of my branch")])
+                             [(AUTH_REF_DEXART, "testrefka8@fexbox.org", 200, "Test found my level 1 user"),
+                              (AUTH_REF_DEXART, "testrefka9@fexbox.org", 200, "Test found my level 2 user"),
+                              (AUTH_REF_DEXART, "refkat18@fexbox.org", 200, "Test found user without branch"),
+                              (AUTH_REF_DEXART, "testrefka@fexbox.org", 200, "Test found my sponsor"),
+                              (AUTH_REF_DEXART, "disik@mailto.plus", 200, "Test found out of my branch")])
     def test_search_user_in_branch_positive(self, user_branch, auth, email, status_code, test_name):
         # проверка, что current_user = искомому email
         current_user_email = user_branch["data"]["current_user"]["email"]  # получаем почту из ответа
@@ -82,7 +83,7 @@ class TestDexartReferralPage:
 
     # проверка поиска несуществующего юзера
     @pytest.mark.parametrize("auth, email, status_code, test_name",
-                             [(AUTH_REF_DEXART_1, "nonexistmail@gmail.com", 200, "Test found non-exist user")])
+                             [(AUTH_REF_DEXART, "nonexistmail@gmail.com", 200, "Test found non-exist user")])
     def test_search_nonexistent_user(self, user_branch, auth, email, status_code, test_name):
         # проверка, что current_user =  False
         current_user_email = user_branch["data"]["current_user"]["email"]  # получаем почту из ответа
@@ -92,9 +93,9 @@ class TestDexartReferralPage:
     # проверка негативных сценариев
     @pytest.mark.parametrize("auth, email, status_code, expected_message, test_name",
                              [(" ", "testrefka@fexbox.org", 401, "Unauthorized", "Test found branch without auth"),
-                              (AUTH_REF_DEXART_1, "testrefka.com", 422, "The email must be a valid email address.",
+                              (AUTH_REF_DEXART, "testrefka.com", 422, "The email must be a valid email address.",
                                "Test found branch with invalid mail"),
-                              (AUTH_REF_DEXART_1, " ", 422, "The email field is required.",
+                              (AUTH_REF_DEXART, " ", 422, "The email field is required.",
                                "Test found branch with empty mail")])
     def test_search_user_in_branch_negative(self, user_branch, auth, email, status_code, expected_message, test_name):
         get_message = user_branch["message"]
@@ -103,7 +104,7 @@ class TestDexartReferralPage:
 
     # проверка наличия всех поля у родителей и юзеров в ветке
     @pytest.mark.parametrize("auth, email, status_code, test_name",
-                             [(AUTH_REF_DEXART_1, "maiL@mail.rf", 200, "Test user with branch")])
+                             [(AUTH_REF_DEXART, "maiL@mail.rf", 200, "Test user with branch")])
     def test_user_branch_fields(self, user_branch, auth, email, status_code, test_name):
         # проверка наличия нужных полей в ветке искомого юзера
         branch_fields = list(user_branch["data"]["branch"][0])
@@ -120,7 +121,7 @@ class TestDexartReferralPage:
 
     # проверка полей, если у юзера нет нижестоящих рефералов
     @pytest.mark.parametrize("auth, email, status_code, test_name",
-                             [(AUTH_REF_DEXART_1, "refkat18@fexbox.org", 200, "Test found fields empty branch")])
+                             [(AUTH_REF_DEXART, "refkat18@fexbox.org", 200, "Test found fields empty branch")])
     def test_user_empty_branch_fields(self, user_branch, auth, email, status_code, test_name):
         # проверка наличия нужных полей в ветке искомого юзера
         branch_fields = list(user_branch["data"]["branch"])
