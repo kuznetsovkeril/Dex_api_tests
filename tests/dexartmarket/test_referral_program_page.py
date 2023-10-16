@@ -25,6 +25,7 @@ def user_branch(auth, email, status_code):
 class TestDexartReferralPage:
 
     # проверка личной страницы в реф программе
+    @pytest.mark.prod
     @pytest.mark.parametrize("auth", [AUTH_REF_DEXART])
     def test_referral_page_fields(self, referral_page, auth):
         # проверка полей во всем ответе
@@ -47,6 +48,7 @@ class TestDexartReferralPage:
         print("Необходимые поля на странице реф программы присутствуют.")
 
     # проверка доступа к реф программе для юзеров из других маркетингов
+    @pytest.mark.prod
     @pytest.mark.parametrize("auth", [AUTH_SPACAD_USER, AUTH_OTON_USER, AUTH_GOOGLE_ATON])
     def test_referral_page_for_non_dexart_user(self, referral_page, auth):
         data_value = referral_page["data"]
@@ -91,6 +93,7 @@ class TestDexartReferralPage:
         Checking.assert_values(False, current_user_email)  # проверяем, что он почта = false
 
     # проверка негативных сценариев
+    @pytest.mark.prod
     @pytest.mark.parametrize("auth, email, status_code, expected_message, test_name",
                              [(" ", "testrefka@fexbox.org", 401, "Unauthorized", "Test found branch without auth"),
                               (AUTH_REF_DEXART, "testrefka.com", 422, "The email must be a valid email address.",
@@ -103,6 +106,7 @@ class TestDexartReferralPage:
         Checking.assert_values(expected_message, get_message)
 
     # проверка наличия всех поля у родителей и юзеров в ветке
+
     @pytest.mark.parametrize("auth, email, status_code, test_name",
                              [(AUTH_REF_DEXART, "maiL@mail.rf", 200, "Test user with branch")])
     def test_user_branch_fields(self, user_branch, auth, email, status_code, test_name):
@@ -119,7 +123,7 @@ class TestDexartReferralPage:
                            'from_percent', 'to_percent', 'ref_count']
         Checking.assert_values(expected_fields, parents_fields)
 
-    # проверка полей, если у юзера нет нижестоящих рефералов
+    # проверка ответа, если у юзера нет нижестоящих рефералов
     @pytest.mark.parametrize("auth, email, status_code, test_name",
                              [(AUTH_REF_DEXART, "refkat18@fexbox.org", 200, "Test found fields empty branch")])
     def test_user_empty_branch_fields(self, user_branch, auth, email, status_code, test_name):
