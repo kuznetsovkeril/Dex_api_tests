@@ -3,11 +3,12 @@ import pytest
 from utilities.api import Dexart_api
 from utilities.checking import Checking
 from utilities.getters import Getters
-from dev_config import *
+from config_check import *
 
 
 class Test_user_dxa_balance:
 
+    @pytest.mark.prod
     def test_show_user_balance(self):
         result = Dexart_api.user_dxa_balance(auth_token=AUTH_BALANCE_PAGE_USER)
         Checking.check_status_code(result, 200)
@@ -38,6 +39,7 @@ class Test_user_dxa_balance:
 
     # проверка, что курс подтягивается для баланса USD и баланс usd считает верно
 
+    @pytest.mark.prod
     def test_usd_balance(self):
 
         # проверка, что курс приходит и он больше нуля
@@ -64,8 +66,9 @@ class Test_user_dxa_balance:
 
     # проверка, что у юзеров вне маркетингов дексарт нет статьи дохода реферальная программа, а остальные есть
 
+    @pytest.mark.prod
     def test_non_dexart_users(self):
-        users = [AUTH_OTON_USER, AUTH_ATON_USER, AUTH_SPACAD_USER]
+        users = [AUTH_OTON_USER, AUTH_GOOGLE_ATON, AUTH_SPACAD_USER]
         for user in users:
             result = Dexart_api.user_dxa_balance(auth_token=user)
             Checking.check_status_code(result, 200)

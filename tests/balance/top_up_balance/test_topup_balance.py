@@ -6,7 +6,7 @@ import pytest
 from utilities.api import Dexart_api
 from utilities.api import Merchant_api
 
-from dev_config import AUTH_TOPUP_BALANCE
+from dev_config import *
 from utilities.checking import Checking
 
 from utilities.getters import Getters
@@ -15,13 +15,14 @@ from utilities.getters import Getters
 
 
 class TestTopUpBalance:
+    # интеграционный тест
 
     @staticmethod  # генерация рандомного чилса в интервале от a и b
     def random_amount(a, b):
         random_amount = random.randint(a, b)
         return random_amount
 
-    @pytest.mark.parametrize("token", [1, 10])   # также проверяется попытка пополнить за DXA [DEX-3379]
+    @pytest.mark.parametrize("token", [1, 10])   # также проверяется попытка пополнить за DXA [DEX-3379] - FAILED это ок
     def test_top_up_balance(self, token):
         # получаем текущий баланс юзера
         result_dxa_balance = Dexart_api.user_dxa_balance(AUTH_TOPUP_BALANCE)

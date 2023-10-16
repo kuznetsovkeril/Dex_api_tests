@@ -4,7 +4,7 @@ import pytest
 
 from utilities.api import Dexart_api
 from utilities.checking import Checking
-from dev_config import AUTH_TOPUP_BALANCE
+from dev_config import *
 from utilities.getters import Getters
 
 
