@@ -1,5 +1,8 @@
+import pytest
+
 from utilities.api import Nft_api
 from utilities.checking import Checking
+from config_check import *
 
 """Проверка каталога NFT"""
 
@@ -8,6 +11,7 @@ class Test_get_nft_catalog():
 
     """Проверка получаемых полей каталога NFT"""
 
+    @pytest.mark.prod
     def test_get_nft_catalog(self):
         print("Get NFT catalog GET request")
         result = Nft_api.nft_catalog("")
@@ -18,6 +22,7 @@ class Test_get_nft_catalog():
         json_fields = ['id', 'name', 'description', 'price', 'price_usd', 'price_usd_sale', 'sale', 'picture', 'video', 'created_at', 'updated_at']
         Checking.check_json_fields_in(result, "data", json_fields)
 
+    @pytest.mark.prod
     def test_search_nft_in_catalog(self):
 
         """Проверка поиска NFT по имени"""
