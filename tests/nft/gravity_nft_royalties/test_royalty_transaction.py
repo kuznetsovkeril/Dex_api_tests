@@ -124,3 +124,5 @@ class TestRoyaltyTransaction:
             print(f'Транзакция Royalties НЕ найдена. PASSED.')
         else:
             raise ValueError(f'У юзера есть Gravity NFT на балансе. Тест-кейс некорректен!')
+
+

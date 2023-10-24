@@ -10,6 +10,7 @@ from utilities.getters import Getters
 
 
 class TestSpacAdSchedule:
+
     """Проверка работы расписания"""  # скорее всего это будет актуально и для прода
 
     @staticmethod  # проверка, что доступ к мероприятию по времени AND вайт листу есть
