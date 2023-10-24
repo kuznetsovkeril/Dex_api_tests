@@ -3,8 +3,7 @@ import pytest
 from utilities.api import Dexart_api
 from utilities.utilities import Instruments
 from utilities.checking import Checking
-from dev_config import AUTH_DXA_WITHDRAW
-from src.secrets import USER_SECRET
+from config_check import *
 from utilities.getters import Getters
 
 
