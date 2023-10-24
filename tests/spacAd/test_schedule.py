@@ -53,7 +53,7 @@ class TestSpacAdSchedule:
     # проверяю ответ для открытого и закрытого расписания
     @staticmethod
     def if_open_hours():
-        result = Spacad_api.if_event_open_hours()
+        result = Spacad_api.event_open_hours()
         Checking.check_status_code(result, 200)
         open_hours_response = Getters.get_json_field_value_0(result, "data")
         if open_hours_response is None:
@@ -64,7 +64,7 @@ class TestSpacAdSchedule:
     # метод проверки, что текущие часы расписания верные, если расписание открыто
     @staticmethod
     def check_current_hours():
-        result = Spacad_api.if_event_open_hours()  # запрашиваю текущее время
+        result = Spacad_api.event_open_hours()  # запрашиваю текущее время
         Checking.check_status_code(result, 200)
         current_time = datetime.utcnow().strftime("%H:%M:%S")  # получаю текущее время в UTC, тк с бэка данные в UTC
         print(f'UTC Time Now: {current_time}')
@@ -112,7 +112,7 @@ class TestSpacAdSchedule:
             assert open_hours == self.if_open_hours(), "Ошибка в текущем расписании"
             print("False. Расписания на сейчас нет, так как ивент недоступен")
         elif result_response != expected_response:
-            result = Spacad_api.if_event_open_hours()
+            result = Spacad_api.event_open_hours()
             open_hours = Getters.get_json_field_value_0(result, "data")
             print(f'Текущее расписание: {open_hours}')
             raise ValueError("Ошибка в расписании! Кейс BROKEN")
@@ -131,8 +131,8 @@ class TestSpacAdSchedule:
 
     @pytest.mark.prod
     def test_non_white_list_user(self):
-        print(EMAIL_SPACAD_NON_WHITELISTED)  # проверяемая почта
-        result = Spacad_api.is_eligible(EMAIL_SPACAD_NON_WHITELISTED)  # проверка поля с сообщением
+        print(EMAIL_SPACAD_NOT_WHITELISTED)  # проверяемая почта
+        result = Spacad_api.is_eligible(EMAIL_SPACAD_NOT_WHITELISTED)  # проверка поля с сообщением
         Checking.check_status_code(result, 403)
         # проверка сообщения в ответе для юзера без доступа к ивенту
         expected_message = "Unfortunately, you are not invited to the event"

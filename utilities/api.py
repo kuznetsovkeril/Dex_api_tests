@@ -491,18 +491,19 @@ class Energy_api:
         resource = f'/api/v1/user/batteries/{energy_id}/activate'
         url = DEXART + resource
 
-        payload_top_up = {}
+        payload = {}
         headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + auth_token
         }
         print(f'URL: {url}')
-        result = Http_method.post(url, payload_top_up, headers)
+        result = Http_method.post(url, payload, headers)
         print(f'Response: {result.text}')
         return result
 
 
 class Spacad_api:
+
     """проверка доступа к мероприятию по времени и вайт листу"""
 
     # проверка на доступ к ивенту
@@ -529,7 +530,7 @@ class Spacad_api:
 
     # получение активности расписания на текущий момент, если активно - вернет часы, если нет вернет null
     @staticmethod
-    def if_event_open_hours():
+    def event_open_hours():
         resource = f'/api/v1/coinglue/hours/current'
         headers = {'Content-Type': 'application/json'}
         url = COINGLUE + resource
@@ -537,3 +538,70 @@ class Spacad_api:
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
         return result
+
+    """Метод просмотра рекламы (отправка события)"""
+
+    @staticmethod
+    def watch(email, signature):
+        resource = f'/api/v1/coinglue/watch'
+        url = COINGLUE + resource
+
+        payload = json.dumps({
+            "email": email,
+            "add_id": "1"
+        })
+        headers = {
+            'Signature': signature,
+            'Content-Type': 'application/json'
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    """Метод установки респисания рекламы"""
+    @staticmethod
+    def set_working_hours(start_time, end_time, settings):
+        resource = f'/api/v1/coinglue/hours'
+        url = COINGLUE + resource
+
+        payload = json.dumps({
+            "start": start_time,
+            "end": end_time,
+            "settings": settings
+        })
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': COINGLUE_API_KEY
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    # удаление расписания
+
+    @staticmethod
+    def refresh_working_hours(start_time, end_time):
+        resource = f'/api/v1/coinglue/hours'
+        url = COINGLUE + resource
+
+        payload = json.dumps({
+            "hours": [
+                {
+                    "start": start_time,
+                    "end": end_time
+                }
+            ]
+        })
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': COINGLUE_API_KEY
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+
+
