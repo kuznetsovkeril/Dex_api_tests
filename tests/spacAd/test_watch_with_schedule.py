@@ -56,7 +56,7 @@ class TestWatchWithSchedule:
          (datetime.utcnow() + timedelta(hours=2)).strftime("%H:%M:%S"),
          settings_3, "The event is closed", 403, 403, "is_finished")
     ], indirect=True)
-    def test_access(self, set_schedule):
+    def test_watch_and_access(self, set_schedule):
         time.sleep(3)  # ожидание перед каждым сбором для 100% избежания конфликта сбора монет
         status_code_eligible, status_code_watch, eligible_field = set_schedule  # определяем значения переменных из фикстуры
         # вход в пространство
