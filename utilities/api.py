@@ -583,7 +583,7 @@ class Spacad_api:
 
     @staticmethod
     def refresh_working_hours(start_time, end_time):
-        resource = f'/api/v1/coinglue/hours'
+        resource = f'/api/v1/coinglue/hours/refresh'
         url = COINGLUE + resource
 
         payload = json.dumps({

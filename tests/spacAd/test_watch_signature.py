@@ -52,12 +52,12 @@ class TestWatchSignature:
 
     """Проверка подписи по позитивным сценариям"""
 
-    @pytest.mark.parametrize("email, salt, seconds, test_name", [
-        (EMAIL_SPACAD_WHITELISTED, WEB_SOLT, 0, "Test signature for WEB"),
-        (EMAIL_SPACAD_WHITELISTED, ANDROID_SOLT, 57, "Test signature for ANDROID"),
-        (EMAIL_SPACAD_WHITELISTED, IOS_SOLT, 57, "Test signature for IOS")])
-    def test_signature_watch_ad_positive(self, set_working_hours, email, salt, seconds, test_name):
-        time.sleep(seconds)  # чтобы можно было собрать следующую монету
+    @pytest.mark.parametrize("email, salt, test_name", [
+        (EMAIL_SPACAD_WHITELISTED, WEB_SOLT, "Test signature for WEB"),
+        (EMAIL_SPACAD_WHITELISTED, ANDROID_SOLT, "Test signature for ANDROID"),
+        (EMAIL_SPACAD_WHITELISTED, IOS_SOLT, "Test signature for IOS")])
+    def test_signature_watch_ad_positive(self, set_working_hours, email, salt, test_name):
+        time.sleep(60)  # чтобы можно было собрать следующую монету
         result = Spacad_api.watch(email=email, signature=self.generate_signature(email=email, salt=salt))
         Checking.check_status_code(result, 200)
         actual = Getters.get_json_field_value_2(result, field_name_1="data", field_name_2="max_limit")
