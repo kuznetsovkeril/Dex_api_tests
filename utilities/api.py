@@ -603,5 +603,16 @@ class Spacad_api:
         print(f'Response: {result.text}')
         return result
 
+    @staticmethod # получение текущей сессии пользователя
+    def current_session(email):
+        resource = f'/api/v1/coinglue/session?email={email}'
+        headers = {'Content-Type': 'application/json'}
+        url = COINGLUE + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
+        print(f'Response: {result.text}')
+        return result
+
+
 
 

@@ -4,6 +4,7 @@ from datetime import timedelta, datetime
 import pytest
 
 from utilities.api import Spacad_api
+from utilities.getters import Getters
 
 
 @pytest.fixture(scope="function")
@@ -35,3 +36,17 @@ def set_spacad_ad():
     Spacad_api.refresh_working_hours("23:00:00", "23:59:59")
     # возвращение предыдущего расписания
     print("Вернул расписание обратно")
+
+
+@pytest.fixture
+def check_session(email):
+    # проверяю текущую сессию пользователя
+    while True:
+        result = Spacad_api.current_session(email)
+        data = Getters.get_json_field_value_0(result, "data")
+        if data is None:
+            print("Session is finished.")
+            break
+        else:
+            print("Session not finished yet.")
+            time.sleep(20)
