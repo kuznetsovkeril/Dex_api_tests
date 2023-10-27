@@ -24,6 +24,7 @@ def set_schedule(request):
 
 
 class TestWatchWithSchedule:
+
     """Проверка отправки события и доступа к мероприятию при различном расписании"""  # на проде не проверить
     settings_1 = {
         "actions": [
@@ -57,7 +58,6 @@ class TestWatchWithSchedule:
          settings_3, "The event is closed", 403, 403, "is_finished")
     ], indirect=True)
     def test_watch_and_access(self, set_schedule):
-        time.sleep(3)  # ожидание перед каждым сбором для 100% избежания конфликта сбора монет
         status_code_eligible, status_code_watch, eligible_field = set_schedule  # определяем значения переменных из фикстуры
         # вход в пространство
         result_eligible = Spacad_api.is_eligible(EMAIL_SPACAD_WHITELISTED)
@@ -70,4 +70,5 @@ class TestWatchWithSchedule:
         # сбор монеты
         result_watch = Spacad_api.watch(EMAIL_SPACAD_WHITELISTED, WATCH_SIGNATURE)
         Checking.check_status_code(result_watch, status_code_watch)
+        time.sleep(58)  # ожидание перед каждым сбором для 100% избежания конфликта сбора монет
 

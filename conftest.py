@@ -38,7 +38,7 @@ def set_spacad_ad():
     print("Вернул расписание обратно")
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def check_session(email):
     # проверяю текущую сессию пользователя
     while True:
