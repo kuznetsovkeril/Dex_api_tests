@@ -57,7 +57,6 @@ class TestUserSession:
         print(f'SESSION data: {data}')
         return data
 
-
     """Проверка сессии пользователя"""
 
     # проверка времени начала сессии
@@ -129,10 +128,25 @@ class TestUserSession:
         # проверяю, что данные в ответе второго запроса сбора монет = данным запроса сессии
         Checking.assert_values(next_watch, self.current_session(email))
 
-        """STEP 3"""
+        """STEP 3"""  # аналогичный шагу 2
+        session_2 = self.current_session(email)
+        previous_coins_2 = session_2["coins"]
+        time.sleep(58)
+        next_watch_3 = self.next_watch(email, signature)  # собираю вторую монетку
+        coins_new_3 = next_watch_3["coins"]
+        Checking.assert_values(previous_coins_2 + 1, coins_new_3)
+        Checking.assert_values(next_watch_3, self.current_session(email))
+        session_id_watch_3 = next_watch_3["id"]
+        Checking.assert_values(session_id, session_id_watch_3)
+        Checking.assert_values(next_watch_3, self.current_session(email))
 
-        # Дождаться окончания сессии, проверить, что следующая сессия не началась, пока не собрал некст монетку
+        """STEP 4"""  # после неуспешного сбора данные сессии не изменятся
+        session_3 = self.current_session(email)
+        time.sleep(30)
+        print("ОЖИДАНИЕ 30 СЕКНУДОВ")
+        next_watch_4 = self.next_watch(email, signature)
+        assert next_watch_4 is False
+        Checking.assert_values(session_3, self.current_session(email))
 
-
-
-
+    # def test_session_finish(self, first_watch, email, signature):
+    #     # Дождаться окончания сессии, проверить, что следующая сессия не началась, пока не собрал некст монетку

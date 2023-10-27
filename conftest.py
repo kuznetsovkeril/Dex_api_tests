@@ -31,6 +31,7 @@ def set_spacad_ad():
         ]
     }
     Spacad_api.set_working_hours(start_time.strftime("%H:%M:%S"), end_time.strftime("%H:%M:%S"), settings)
+    time.sleep(3)
     print("Расписание установлено")
     yield
     Spacad_api.refresh_working_hours("23:00:00", "23:59:59")
