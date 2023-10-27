@@ -13,7 +13,7 @@ def wait_between_tests():
     time.sleep(delay)
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def set_spacad_ad():
     # установка расписания
     start_time = datetime.utcnow()  # получаю текущее время utc

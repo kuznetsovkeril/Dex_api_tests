@@ -48,7 +48,7 @@ class TestControlCoinsCollection:
 
         # второй сбор через 63 сек
         time.sleep(63)
-        self.failed_collect_coin(email, signature)
+        self.collect_coin(email, signature)
 
         # неуспешный сбор через 53 секунд
         time.sleep(53)
@@ -58,7 +58,7 @@ class TestControlCoinsCollection:
         session_coins = self.get_coins_balance(email)
         Checking.assert_values(2, session_coins)  # ранее было собрано 2 монетки
 
-        # третий сбор через 9 секунд
+        # третий сбор через 9 секунд, суммарно дает >60 сек с предыдущего, поэтому успех
         time.sleep(9)
         self.collect_coin(email, signature)
 
@@ -70,7 +70,7 @@ class TestControlCoinsCollection:
         time.sleep(59)
         self.collect_coin(email, signature)
 
-        # шестой сбор, который не должен засчитаться
+        # шестой сбор, который не должен быть успешным
         time.sleep(60)
         self.failed_collect_coin(email, signature)
 
