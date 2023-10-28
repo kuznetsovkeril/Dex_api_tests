@@ -1,3 +1,4 @@
+import json
 import time
 from datetime import datetime, timedelta
 
@@ -24,7 +25,7 @@ def first_watch(email, signature):
     # проверяю, что у юзера нет новой сессии, иначе будет дожидаться пока не закончится
     while True:
         result = Spacad_api.current_session(email)
-        data = Getters.get_json_field_value_0(result, "data")
+        data = json.loads(result.text)["data"]
         if data is None:
             print("Session is finished.")
             break
@@ -33,80 +34,95 @@ def first_watch(email, signature):
             time.sleep(20)
 
     result_watch = Spacad_api.watch(email, signature)  # собираю первую монетку
-    Checking.check_status_code(result, 200)
-    yield result_watch
+    Checking.check_status_code(result_watch, 200)
+    result_watch_data = json.loads(result_watch.text)["data"]
+    yield result_watch_data
 
 
 class TestUserSession:
+
+    #
+    @staticmethod
+    def get_current_time():
+        current_time_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        current_time = datetime.strptime(current_time_str, "%Y-%m-%d %H:%M:%S")
+        return current_time
+
+    @staticmethod
+    def get_created_at(first_watch_result):
+        created_at_str = first_watch_result["created_at"]
+        print(first_watch_result)
+        created_at = datetime.strptime(created_at_str.replace('T', ' ').replace(".000000Z", ''), "%Y-%m-%d %H:%M:%S")
+        return created_at
+
+    @staticmethod
+    def get_expire_at(first_watch_result):
+        expire_at_str = first_watch_result["expire_at"]
+        expire_at = datetime.strptime(expire_at_str, "%Y-%m-%d %H:%M:%S")
+        return expire_at
 
     # последующий сбор монетки
     @staticmethod
     def next_watch(email, signature):
         result = Spacad_api.watch(email, signature)  # собираю первую монетку
         Checking.check_status_code(result, 200)
-        data = Getters.get_json_field_value_0(result, "data")
-        print(f'WATCH data: {data}')
-        return data
+        watch_data = json.loads(result.text)["data"]
+        print(f'WATCH data: {watch_data}')
+        return watch_data
 
     # получение сессии пользователя
     @staticmethod
     def current_session(email):
         result = Spacad_api.current_session(email)
         Checking.check_status_code(result, 200)
-        data = Getters.get_json_field_value_0(result, "data")
-        print(f'SESSION data: {data}')
-        return data
+        session_data = json.loads(result.text)["data"]
+        print(f'SESSION data: {session_data}')
+        return session_data
 
     """Проверка сессии пользователя"""
 
     # проверка времени начала сессии
     def test_session_create_time(self, set_spacad_ad, first_watch):
-        result = first_watch
-
+        first_watch_result = first_watch
         # получаю текущий тайм - время отправки запроса
-        watch_time_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-        watch_time = datetime.strptime(watch_time_str, "%Y-%m-%d %H:%M:%S")
+        watch_time = self.get_current_time()
 
-        # беру время начала квеста из пререквеста просмотра
-        created_at_str = Getters.get_json_field_value_2(result, "data", "created_at")
-        created_at = datetime.strptime(created_at_str.replace('T', ' ').replace(".000000Z", ''), "%Y-%m-%d %H:%M:%S")
+        # беру время начала квеста из пререквеста первого просмотра
+        created_at = self.get_created_at(first_watch_result)
 
         # высчитываю разницу между временем отправкой запроса и временем создания
         dif_start_time = watch_time - created_at
-        assert timedelta(seconds=0) <= dif_start_time <= timedelta(seconds=2), "Временя не совпало"
+        assert timedelta(seconds=0) <= dif_start_time <= timedelta(seconds=2), "Временя начала сессии неверное!"
         print("Время начала сессии корректное")
 
     def test_session_expire_time(self, set_spacad_ad, first_watch):
-        result = first_watch
+        first_watch_result = first_watch
 
-        created_at_str = Getters.get_json_field_value_2(result, "data", "created_at")
-        created_at = datetime.strptime(created_at_str.replace('T', ' ').replace(".000000Z", ''), "%Y-%m-%d %H:%M:%S")
+        created_at = self.get_created_at(first_watch_result)
+        expire_at = self.get_expire_at(first_watch_result)
 
-        expire_at_str = Getters.get_json_field_value_2(result, "data", "expire_at")
-        expire_at = datetime.strptime(expire_at_str, "%Y-%m-%d %H:%M:%S")
-
+        # получаю разницу между окончанием и началом сессии
         time_dif = expire_at - created_at
 
-        # разница между началом сессии и ее концом должна быть равна 5 минутам (дев)
+        # проверяю, что разница между началом сессии и ее концом равна 5 минутам (дев)
         expected_dif = timedelta(minutes=5)
         Checking.assert_values(expected_dif, time_dif)
 
-    # проверяется данные в полях сессии и в полях ответа запроса сбора монет
-    def test_session_data(self, first_watch, email, signature):
-        result = first_watch  # это data первого сбора монеты
-        first_watch_data = Getters.get_json_field_value_0(result, "data")
+    # проверяются данные в полях сессии и в полях ответа запроса сбора монет
+    def test_session_data(self, set_spacad_ad, first_watch, email, signature):
+        result_first_watch = first_watch  # это data первого сбора монеты
 
         # получаю id сессии первого запроса
-        session_id = Getters.get_json_field_value_2(result, "data", "id")
+        session_id = result_first_watch["id"]
 
         """STEP 1"""
         # проверяю, что кол-во монет = 1
-        coins_first = Getters.get_json_field_value_2(result, "data", "coins")
+        coins_first = result_first_watch["coins"]
         Checking.assert_values(1, coins_first)
 
         # проверяю, что данные в ответе первого запроса сбора монет = данным запроса сессии
         current_session = self.current_session(email)
-        Checking.assert_values(current_session, first_watch_data)
+        Checking.assert_values(current_session, result_first_watch)
 
         """STEP 2"""
 
@@ -148,5 +164,28 @@ class TestUserSession:
         assert next_watch_4 is False
         Checking.assert_values(session_3, self.current_session(email))
 
-    # def test_session_finish(self, first_watch, email, signature):
-    #     # Дождаться окончания сессии, проверить, что следующая сессия не началась, пока не собрал некст монетку
+    def test_session_finish(self, set_spacad_ad, first_watch, email, signature):
+        # дожидаемся окончания сессии и проверяем, что data = null и после можно начать новую сессию
+        first_watch_result = first_watch  # это data первого сбора монеты
+        current_time = self.get_current_time()
+        expire_at = self.get_expire_at(first_watch_result)
+        time_wait = (expire_at - current_time).total_seconds()
+        print(f'Wait for {time_wait} seconds')
+        time.sleep(time_wait + 2)
+
+        # проверяю, что data текущей сессии = null
+        check_session = self.current_session(email)
+        assert check_session is None
+        print("Сессия завершена")
+
+        # начинаю новую сессию
+        previous_session_id = first_watch_result # получаю id предыдущей сессии
+        print(previous_session_id)
+        new_session = self.next_watch(email, signature)
+        new_session_id = new_session["id"]
+        print(new_session_id)
+        assert new_session_id > previous_session_id
+
+
+
+
