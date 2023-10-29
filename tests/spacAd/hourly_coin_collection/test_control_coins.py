@@ -46,12 +46,12 @@ class TestControlCoinsCollection:
         # первый сбор монеты
         self.collect_coin(email, signature)
 
-        # второй сбор через 61 сек
-        time.sleep(61)
+        # второй сбор через 60 сек
+        time.sleep(60)
         self.collect_coin(email, signature)
 
-        # неуспешный сбор через 53 секунд, через 55-59 сек может засчитаться - допускается отклонение
-        time.sleep(54)
+        # неуспешный сбор через 53 секунды
+        time.sleep(53)
         self.failed_collect_coin(email, signature)
 
         # проверка, что после неуспешного сбора баланс не поменялся в сессии
@@ -59,11 +59,11 @@ class TestControlCoinsCollection:
         Checking.assert_values(2, session_coins)  # ранее было собрано 2 монетки
 
         # третий сбор через 7 секунд, суммарно дает >60 сек с предыдущего, поэтому успех
-        time.sleep(6)
+        time.sleep(7)
         self.collect_coin(email, signature)
 
-        # четвертый сбор
-        time.sleep(60)
+        # четвертый сбор, больше 60 сек
+        time.sleep(62)
         self.collect_coin(email, signature)
 
         # пятый сбор - тут уже у пользователя в сессии должно быть макс монет за сессии = 5
