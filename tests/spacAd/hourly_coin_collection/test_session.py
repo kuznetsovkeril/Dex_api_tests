@@ -45,6 +45,7 @@ class TestUserSession:
     @staticmethod
     def get_current_time():
         current_time_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        print(f'ТЕКУЩЕЕ ВРЕМЯ = {current_time_str}')
         current_time = datetime.strptime(current_time_str, "%Y-%m-%d %H:%M:%S")
         return current_time
 
@@ -161,7 +162,7 @@ class TestUserSession:
         time.sleep(30)
         print("ОЖИДАНИЕ 30 СЕКНУДОВ")
         next_watch_4 = self.next_watch(email, signature)
-        assert next_watch_4 is False
+        assert next_watch_4 is False, "Неуспешный просмотр не вернул FALSE!"
         Checking.assert_values(session_3, self.current_session(email))
 
     def test_session_finish(self, set_spacad_ad, first_watch, email, signature):
@@ -171,20 +172,18 @@ class TestUserSession:
         expire_at = self.get_expire_at(first_watch_result)
         time_wait = (expire_at - current_time).total_seconds()
         print(f'Wait for {time_wait} seconds')
-        time.sleep(time_wait + 2)
+        time.sleep(time_wait + 10)  # беру запасом 10 секунд, чтобы сессия точно успела закончиться
 
         # проверяю, что data текущей сессии = null
         check_session = self.current_session(email)
-        assert check_session is None
+        assert check_session is None, "Текущая сессия не завершилась"
         print("Сессия завершена")
 
         # начинаю новую сессию
-        previous_session_id = first_watch_result # получаю id предыдущей сессии
-        print(previous_session_id)
+        previous_session_id = first_watch_result["id"]  # получаю id предыдущей сессии
         new_session = self.next_watch(email, signature)
         new_session_id = new_session["id"]
-        print(new_session_id)
-        assert new_session_id > previous_session_id
+        assert new_session_id > previous_session_id, "Неверный id новой сессии"
 
 
 
