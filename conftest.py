@@ -26,7 +26,8 @@ def set_spacad_ad():
             {
                 "action": "invokeCustomEvent",
                 "target": "",
-                "args": "PlaySpacAD"
+                "args": "PlaySpacAD",
+                "collect_coins": "1"
             }
         ]
     }
