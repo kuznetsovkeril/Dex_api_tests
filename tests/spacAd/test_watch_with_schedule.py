@@ -103,5 +103,8 @@ class TestWatchWithSchedule:
         Checking.check_status_code(result_watch, status_code_watch)
         time.sleep(60)  # ожидание перед каждым сбором для 100% избежания конфликта сбора монет
 
-    def test_watch_with_closed_schedule(self):
+    def test_collect_coins(self):
+        pass
+
+    def test_for_adults(self):
         pass
