@@ -99,12 +99,12 @@ class TestEnergyGift:
         # проверка количества юнитов
         # добавляю к старому результату 4, так как 40$ - 4 по 10$
         new_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
-        Checking.assert_values(current_units_balance + 4, new_units_balance)
+        Checking.assert_values(current_units_balance + 7, new_units_balance)
 
         # проверка количества выданных токенов
         # ожидаемое примерное значение ~ фактическому после получения батареек
         new_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
-        check_new_tokens_balance = self.calculate_tokens(40, dxa_rate)  # расчет, сколько ожидаю получить на балансе токенов
+        check_new_tokens_balance = self.calculate_tokens(25, dxa_rate)  # расчет, сколько ожидаю получить на балансе токенов
         expected_new_tokens_balance = current_tokens_balance + check_new_tokens_balance  # ожидаемое изменение на балансе
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
@@ -125,12 +125,12 @@ class TestEnergyGift:
         # проверка количества юнитов
         # добавляю к старому результату 11, так как 65$ - 6 по 10$ и 5 по 1$ = 11
         new_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
-        Checking.assert_values(current_units_balance + 11, new_units_balance)
+        Checking.assert_values(current_units_balance + 9, new_units_balance)
 
         # проверка количества выданных токенов
         # ожидаемое примерное значение ~ фактическому после получения батареек
         new_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
-        check_new_tokens_balance = self.calculate_tokens(65, dxa_rate)  # расчет, сколько ожидаю получить
+        check_new_tokens_balance = self.calculate_tokens(45, dxa_rate)  # расчет, сколько ожидаю получить
         expected_new_tokens_balance = current_tokens_balance + check_new_tokens_balance  # ожидаемое изменение на балансе
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
@@ -151,12 +151,12 @@ class TestEnergyGift:
         # проверка количества юнитов
         # добавляю к старому результату 20, так как 182$ - 18 по 10$ и 2 по 1$ = 20
         new_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
-        Checking.assert_values(current_units_balance + 20, new_units_balance)
+        Checking.assert_values(current_units_balance + 12, new_units_balance)
 
         # проверка количества выданных токенов
         # ожидаемое примерное значение ~ фактическому после получения батареек
         new_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
-        check_new_tokens_balance = self.calculate_tokens(182, dxa_rate)  # расчет, сколько ожидаю получить
+        check_new_tokens_balance = self.calculate_tokens(120, dxa_rate)  # расчет, сколько ожидаю получить
         expected_new_tokens_balance = current_tokens_balance + check_new_tokens_balance  # ожидаемое изменение на балансе
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
@@ -183,13 +183,13 @@ class TestEnergyGift:
         # проверка количества юнитов
         # добавляю к старому результату 35, так как за все 3 зоны дается 35 юнитов
         new_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
-        Checking.assert_values(current_units_balance + 35, new_units_balance)
+        Checking.assert_values(current_units_balance + 28, new_units_balance)
 
         # проверка количества выданных токенов
         # ожидаемое примерное значение ~ фактическому после получения батареек
         # номинал всех батареек с трех зон составляет 287$
         new_tokens_balance = self.get_inactive_tokens_balance(AUTH_EU_GIFTS)
-        check_new_tokens_balance = self.calculate_tokens(287, dxa_rate)  # расчет, сколько ожидаю получить
+        check_new_tokens_balance = self.calculate_tokens(190, dxa_rate)  # расчет, сколько ожидаю получить
         expected_new_tokens_balance = current_tokens_balance + check_new_tokens_balance  # ожидаемое изменение на балансе
         print(f'Примерное ожидаемое количество токенов в полученных пакетах = {expected_new_tokens_balance}')
         self.approximate_tokens_assertion(expected_new_tokens_balance, new_tokens_balance, 100)
