@@ -63,11 +63,11 @@ class TestControlCoinsCollection:
         self.collect_coin(email, signature)
 
         # четвертый сбор, больше 60 сек
-        time.sleep(62)
+        time.sleep(61)
         self.collect_coin(email, signature)
 
         # пятый сбор - тут уже у пользователя в сессии должно быть макс монет за сессии = 5
-        time.sleep(60)
+        time.sleep(58)
         self.collect_coin(email, signature)
 
         # шестой сбор, который не должен быть успешным, так как сессия еще идет и макс кол-во собрано

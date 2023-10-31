@@ -146,6 +146,7 @@ class TestWatchWithSchedule:
         # сбор монеты
         result_watch = Spacad_api.watch(email=email, signature=signature)
         Checking.check_status_code(result_watch, status_code_watch)
+        # тут нужно проверить респонс что event Event doesn't start yet.!!!
 
     def test_collect_coins(self):
         pass
