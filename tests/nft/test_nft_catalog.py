@@ -27,7 +27,6 @@ class Test_get_nft_catalog():
 
         """Проверка поиска NFT по имени"""
 
-        print("Get NFT catalog GET request")
         param = "?name=Gravity NFT"
         result = Nft_api.nft_catalog(param)
         # проверка статус кода

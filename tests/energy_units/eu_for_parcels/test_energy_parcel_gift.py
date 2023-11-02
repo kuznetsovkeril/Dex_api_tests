@@ -97,7 +97,7 @@ class TestEnergyGift:
         time.sleep(5)
 
         # проверка количества юнитов
-        # добавляю к старому результату 4, так как 40$ - 4 по 10$
+        # добавляю к старому результату 4, так как 40$ - 4 по 10$ - неактуально!!!
         new_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
         Checking.assert_values(current_units_balance + 7, new_units_balance)
 

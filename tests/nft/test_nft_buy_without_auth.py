@@ -4,6 +4,7 @@ import pytest
 from utilities.api import Nft_api
 from utilities.checking import Checking
 from config_check import *
+from utilities.getters import Getters
 
 
 class TestNftBuyWithEmail:
@@ -23,17 +24,16 @@ class TestNftBuyWithEmail:
         result = Nft_api.buy_nft_with_email(GRAVITY_NFT_ID, amount, pay_driver, email)
 
         # от полученного статус кода зависит по какой логике будет осуществляться проверка
-        Checking.check_status_code(result, 201)
-        # если 201, проверяю, что создана ссылка для оплаты
-        value_searched = payment_link  # буду проверять, по части ссылок на оплату oton, transak, nearpay
-        Checking.check_json_value_searched(result, "data", "payment_url", value_searched)
+        Checking.check_status_code(result, 400)
 
+        message = Getters.get_json_field_value_0(result, "message")
+        Checking.assert_values("Inactive product provided", message)
     """Проверка, что неавторизованный юзер не может покупкать с баланса [DEX-3350]"""
 
     @pytest.mark.prod
-    @pytest.mark.parametrize("pay_driver, amount, payment_link",
-                             [("balance", 2, None)])
-    def test_buy_with_email_by_balance(self, pay_driver, amount, payment_link):
+    @pytest.mark.parametrize("pay_driver, amount",
+                             [("balance", 2)])
+    def test_buy_with_email_by_balance(self, pay_driver, amount):
 
         # данные в тело запроса
         print(f'Покупаемое кол-во NFT: {amount}')
