@@ -10,7 +10,6 @@ class Checking():
     @staticmethod
     def check_status_code(result, status_code):
         assert status_code == result.status_code, f'Статус код не прошел проверку. Получен код: {result.status_code}'
-        print(f'Статус код прошел проверку. Код: {result.status_code}')
 
     """Метод проверки наличия обязательных полей в ответе"""
 

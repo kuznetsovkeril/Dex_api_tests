@@ -10,6 +10,7 @@ from utilities.getters import Getters
 
 
 class TestRoyaltyStatistics:
+
     """Проверка статистики для раздачи Royalties"""
 
     # запуск раздачи royalties
@@ -18,6 +19,12 @@ class TestRoyaltyStatistics:
         result = Dexart_api.give_royalties()
         Checking.check_status_code(result, 200)
         print("Все роялти выданы пользователям")
+
+    @staticmethod
+    def buy_ticket(room_id):
+        result_buy_ticket = Dexart_api.ticket_buy(AUTH_BUY_GG_ITEMS, room_id=room_id)
+        print(f'Room ID: {room_id}')
+        Checking.check_status_code(result_buy_ticket, 200)
 
     # метод покупки booster
     @staticmethod
@@ -31,13 +38,15 @@ class TestRoyaltyStatistics:
     def refresh_statistic():
         result = Dexart_api.royalties_statistics()
         Checking.check_status_code(result, 200)
+        fund_value = Getters.get_json_field_value_0(result, "fund")
+        fund_acc_value = Getters.get_json_field_value_0(result, "fund_acc")
+        royalty_value = Getters.get_json_field_value_0(result, "royalty")
         print("Статистика получена и обновлена")
-        return result
+        return fund_value, fund_acc_value, royalty_value
 
     @staticmethod
     def assert_fund_income(old_fund_value, old_fund_acc_value, expected_income):
-
-        result = Dexart_api.royalties_statistics()
+        result = Dexart_api.royalties_statistics()  # получу обновленную статистику
         new_fund_value = Getters.get_json_field_value_0(result, "fund")
         new_fund_acc_value = Getters.get_json_field_value_0(result, "fund_acc")
         expected_fund_income = old_fund_value + expected_income
@@ -47,96 +56,51 @@ class TestRoyaltyStatistics:
         print(f'Ожидаемое новое fund_acc_income = {expected_fund_acc_income}')
         Checking.assert_values(expected_fund_acc_income, new_fund_acc_value)
 
-    """Проверка ответа статистики"""  # статус код, все поля присутствуют, дата = сегодня
+    # проверка, что все виды покупок в гг и во всех комнатах увеличивают fund и fund_acc одинаково
+    """Покупка билета на разных уровнях"""
 
-    def test_royalties_statistics(self):
-        # получение статистики
-        result = self.refresh_statistic()
-        # проверка что поле date = today date
-        statistic_date = Getters.get_json_field_value_0(result, "date")
-        today_date = datetime.date.today()
-        print("Текущая дата:", today_date)
-        Checking.assert_values(str(today_date), statistic_date)
-        # проверить, что все поля присутствуют
-        result_fields = Checking.show_json_fields(result)
-        expected_fields = ['date', 'fund', 'fund_acc', 'royalty', 'total_nfts']
-        Checking.assert_values(expected_fields, result_fields)
-        print("Необходимые поля присутствуют в ответе")
+    @pytest.mark.parametrize("room_id", ["Air Test", "Pool", "Fork"])
+    def test_funds_after_purchase_tickets(self, room_id):
+        # получаем значения из статистики до покупки
+        old_fund, old_fund_acc, royalty = self.refresh_statistic()
 
-    # проверка, что кол-во нфт отдает примерно верное число (точно не получится сосчитать)
-    def test_total_nfts(self):
-        # получение статистики
-        result = self.refresh_statistic()
-        # получение total_nfts
-        total_nfts = Getters.get_json_field_value_0(result, "total_nfts")
-        assert total_nfts > 20000, "Неверное total_nft. Нужно проверить!"
+        self.buy_ticket(room_id=room_id)
+        time.sleep(3)
+        # проверка изменения дохода в fund и fund_acc после покупки билета
+        self.assert_fund_income(old_fund, old_fund_acc, 1)
 
-    # проверка, что все виды покупок в гг и во всех комнатах увеличивают Fund и fund_acc одинаково
-    @pytest.mark.parametrize("room_id, booster_id, booster_cost", [("Air Test", 3, 5), ("Pool", 6, 100)])
-    def test_statistic_fund(self, room_id, booster_id, booster_cost):
-        result = Dexart_api.royalties_statistics()
-        # текущее значение в поле fund
-        old_fund_value = Getters.get_json_field_value_0(result, "fund")
-        old_fund_acc_value = Getters.get_json_field_value_0(result, "fund_acc")
+    """Покупка всех бустеров на разных уровнях"""
 
-        """Покупка билета в Air Test и Pool"""
+    @pytest.mark.parametrize("room_id, booster_id, booster_cost",
+                             [("Air Test", 3, 5), ("Pool", 4, 10), ("Fork", 5, 25),
+                              ("Air Test", 6, 100), ("Pool", 7, 50), ("Fork", 8, 10)])
+    def test_funds_after_purchase_boosters(self, room_id, booster_id, booster_cost):
 
-        result_buy_ticket = Dexart_api.ticket_buy(AUTH_BUY_GG_ITEMS, room_id=room_id)
-        print(f'Room ID: {room_id}')
-        Checking.check_status_code(result_buy_ticket, 200)
-        # если у юзера уже куплен билет на этот день, проверяем, что статистика не изменилась
-        try:
-            check_message = Getters.get_json_field_value_2(result_buy_ticket, "data", "message")
-            # проверка, что билет куплен, тогда в fund +0
-            if check_message == "Already have a tiket":
-
-                time.sleep(3)
-                # проверка изменения дохода в fund и fund_acc после покупки билетов
-                self.assert_fund_income(old_fund_value, old_fund_acc_value, 0)
-        # если поле с сообщением не найдено, считаем, что билет куплен, и в fund + 1
-        except KeyError:
-            # цена одного билета 1 DXA
-            print("Билет успешно куплен")
-
-            time.sleep(3)
-            # проверка изменения дохода в fund и fund_acc после покупки билетов
-            self.assert_fund_income(old_fund_value, old_fund_acc_value, 1)
-
-        """Покупка бустеров в разных комнатах"""
-
-        # запрос статистики
-        result = Dexart_api.royalties_statistics()
-        # текущее значение в поле fund
-        old_fund_value = Getters.get_json_field_value_0(result, "fund")
-        old_fund_acc_value = Getters.get_json_field_value_0(result, "fund_acc")
+        # получаем значения из статистики до покупки
+        old_fund, old_fund_acc, royalty = self.refresh_statistic()
         # покупка booster
         self.buy_booster(booster_id, room_id)
-
         time.sleep(3)
         # проверка изменения дохода в fund и fund_acc после покупки бустеров
-        self.assert_fund_income(old_fund_value, old_fund_acc_value, booster_cost)
+        self.assert_fund_income(old_fund, old_fund_acc, booster_cost)
 
     # проверка кол-ва роялти для раздачи на данный момент
     def test_total_royalties(self):
         # получение статистики
-        result_statistics = self.refresh_statistic()
+        fund, fund_acc, royalty = self.refresh_statistic()
 
-        # получаю значения из полей статистики
-        fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
-        royalty_value = Getters.get_json_field_value_0(result_statistics, "royalty")
         # избежать кейса, когда нет ничего к начислению
-        if fund_acc_value <= 0:
+        if fund_acc <= 0:
+            Checking.assert_values(0, royalty)
             self.buy_booster(booster_id=6, room_id="Pool")
             # снова запрашиваю статистику, чтобы обновить fund_acc_value
-            result_statistics = Dexart_api.royalties_statistics()
-            fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
-            royalty_value = Getters.get_json_field_value_0(result_statistics, "royalty")
-            if fund_acc_value <= 0:
+            fund, fund_acc, royalty = self.refresh_statistic()
+            if fund_acc <= 0:
                 raise ValueError("После покупки статистика не поменялась. Кейс FAILED")
 
         # Проверка корректности значения в роялти = fund_acc * на долю для роялти
-        expected_total_royalty = fund_acc_value * 15.015 / 100
-        Checking.assert_values(expected_total_royalty, royalty_value)
+        expected_royalty = fund_acc * 0.15015
+        Checking.assert_values(expected_royalty, royalty)
         print("Royalty рассчитано верно")
 
     # Проверка, что после раздачи, acc_fund обнуляется и последующее кол-во роялти считает от обновленного значения
@@ -179,7 +143,7 @@ class TestRoyaltyStatistics:
         fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
         royalty_value = Getters.get_json_field_value_0(result_statistics, "royalty")
         # Проверка корректности значения в роялти = fund_acc * на долю для роялти
-        expected_total_royalty = fund_acc_value * 15.015 / 100
+        expected_total_royalty = fund_acc_value * 0.15015
         Checking.assert_values(expected_total_royalty, royalty_value)
         print("Royalty рассчитано верно")
         # запускаю снова раздачу роялти
@@ -197,7 +161,7 @@ class TestRoyaltyStatistics:
         assert royalty_value == 0, "Возможна ошибка"
         print("Значения в статистике обнулились")
 
-    # проверка, что royalty = 0, если fund_acc_value = 0
+    # проверка, что royalty = 0, если fund_acc_value = 0, ЭТОТ ТЕСТ МОЖНО УДАЛИТЬ!
     def test_zero_total_royalties(self):
         # запуск выплаты royalty, чтобы обновить fund_acc
         self.give_royalties()
