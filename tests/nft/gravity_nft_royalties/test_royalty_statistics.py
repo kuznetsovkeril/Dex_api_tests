@@ -10,7 +10,6 @@ from utilities.getters import Getters
 
 
 class TestRoyaltyStatistics:
-
     """Проверка статистики для раздачи Royalties"""
 
     # запуск раздачи royalties
@@ -110,13 +109,10 @@ class TestRoyaltyStatistics:
         time.sleep(5)
 
         # получение статистики
-        result_statistics = self.refresh_statistic()
+        fund, fund_acc, royalty = self.refresh_statistic()
 
-        # получаю значения из полей статистики
-        fund_value = Getters.get_json_field_value_0(result_statistics, "fund")
-        fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
         # исключить возможность, чт на момент теста равны, нам важно, чтобы они были разные
-        if fund_value == fund_acc_value:
+        if fund == fund_acc:
             # покупаю бустер
             self.buy_booster(booster_id=6, room_id="Pool")
             time.sleep(3)
@@ -125,40 +121,31 @@ class TestRoyaltyStatistics:
             time.sleep(5)
 
         # получение статистики
-        result_statistics = self.refresh_statistic()
-
-        # получаю значения из полей статистики
-        fund_value = Getters.get_json_field_value_0(result_statistics, "fund")
-        fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
+        fund, fund_acc, royalty = self.refresh_statistic()
 
         # если после покупки бустера и раздачи они по-прежнему равны, то тест провален.
-        if fund_value <= fund_acc_value:
+        if fund <= fund_acc:
             raise ValueError("Условия теста не выполняются, тест FAILED")
         # покупаю бустер
         self.buy_booster(booster_id=6, room_id="Pool")
         time.sleep(2)
         # получение статистики
-        result_statistics = self.refresh_statistic()
+        fund, fund_acc, royalty = self.refresh_statistic()
         # получаю значения из полей статистики
-        fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
-        royalty_value = Getters.get_json_field_value_0(result_statistics, "royalty")
         # Проверка корректности значения в роялти = fund_acc * на долю для роялти
-        expected_total_royalty = fund_acc_value * 0.15015
-        Checking.assert_values(expected_total_royalty, royalty_value)
+        expected_royalty = fund_acc * 0.15015
+        Checking.assert_values(expected_royalty, royalty)
         print("Royalty рассчитано верно")
         # запускаю снова раздачу роялти
         self.give_royalties()
         time.sleep(5)
         # получение статистики
-        result_statistics = self.refresh_statistic()
+        fund, fund_acc, royalty = self.refresh_statistic()
         # получаю значения из полей статистики
-        fund_value = Getters.get_json_field_value_0(result_statistics, "fund")
-        fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
-        royalty_value = Getters.get_json_field_value_0(result_statistics, "royalty")
         # проверка, что fund_acc_value и royalty_value обновились, fund осталось больше 0
-        assert fund_value > 0, "Возможна ошибка"
-        assert fund_acc_value == 0, "Возможна ошибка"
-        assert royalty_value == 0, "Возможна ошибка"
+        assert fund > 0, "Возможна ошибка"
+        assert fund_acc == 0, "Возможна ошибка"
+        assert royalty == 0, "Возможна ошибка"
         print("Значения в статистике обнулились")
 
     # проверка, что royalty = 0, если fund_acc_value = 0, ЭТОТ ТЕСТ МОЖНО УДАЛИТЬ!

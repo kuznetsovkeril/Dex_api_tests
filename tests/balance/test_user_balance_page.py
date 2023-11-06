@@ -59,7 +59,7 @@ class Test_user_dxa_balance:
         dxa_balance = Getters.get_json_field_value_3(result_balance, "data", "balance", "balance")
         real_usd_balance = Getters.get_json_field_value_3(result_balance, "data", "balance", "balance_usd")
         check_usd_balance = float(dxa_balance) * float(dxa_rate)
-        expected_usd_balance = check_usd_balance
+        expected_usd_balance = round(check_usd_balance, 2)
         print(f'Ожидаемый баланс после округления = {expected_usd_balance}')
         Checking.assert_values(expected_usd_balance, float(real_usd_balance))
         print("Баланс USD пошел проверку")

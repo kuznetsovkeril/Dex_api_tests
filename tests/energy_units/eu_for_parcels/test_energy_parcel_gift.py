@@ -11,6 +11,7 @@ from utilities.getters import Getters
 
 
 class TestEnergyGift:
+
     """Проверка выдачи и объема выданныех EU tokens за покупку парселя"""
 
     # FAR	40$ - 4 по 10$ = 4
@@ -19,7 +20,6 @@ class TestEnergyGift:
 
     @staticmethod  # получаем баланс неактивных юнитов юзера
     def get_inactive_units_balance(auth_token):
-        print("Получение баланса не активированных юнитов")
         result = Energy_api.energy_balance(auth_token)
         Checking.check_status_code(result, 200)
         inactive_units_balance = Getters.get_json_field_value_4(result, "data", "data", "inactive", "units")
@@ -27,7 +27,6 @@ class TestEnergyGift:
 
     @staticmethod  # получаем сколько у юзера неактивных токенов
     def get_inactive_tokens_balance(auth_token):
-        print("Получение баланса не активированных токенов")
         result = Energy_api.energy_balance(auth_token)
         Checking.check_status_code(result, 200)
         inactive_units_tokens = Getters.get_json_field_value_4(result, "data", "data", "inactive", "tokens")
@@ -35,7 +34,6 @@ class TestEnergyGift:
 
     @staticmethod  # получаем курс DXA
     def get_dxa_rate():
-        print("Получение курса DXA")
         result = Dexart_api.dxa_usd_rate()
         Checking.check_status_code(result, 200)
         dxa_rate = Getters.get_json_field_value_2(result, "data", "rate")
@@ -43,7 +41,6 @@ class TestEnergyGift:
 
     @staticmethod  # выборка перселя из ценовой зоны и добаление в корзину
     def cart_parcel(price_zone, auth_token):
-        print("Выборка нужного парселя на карте")
         result_parcel_list = Dexart_api.get_region_parcels("REGION-15")  # парсинг списка парселей из 15 района
         Checking.check_status_code(result_parcel_list, 200)
         parcel_id = Getters.get_parcel_by_status(result_parcel_list, status_id=1,
@@ -54,20 +51,17 @@ class TestEnergyGift:
 
     @staticmethod  # покупка добавленых в корзину парселей
     def buy_parcel(auth_token):
-        print("Оплата заказа парселей с баланса")
         result_buy_parcel = Dexart_api.buy_parcel(auth_token, driver="balance", email="some_user_email@fexbox.org")
         Checking.check_status_code(result_buy_parcel, 201)
 
     @staticmethod  # активация токенов
     def activate_energy(auth_token):
-        print("Активация энергетических юнитов")
         result = Energy_api.activate_all_energy(auth_token)
         Checking.check_status_code(result, 200)
         print("Все EU активированы")
 
     @staticmethod  # вычисляется ожидаемое кол-во токенов
     def calculate_tokens(usd_amount, dxa_rate):
-        print("Расчет количества токенов в выданных юнитах")
         tokens_amount = usd_amount / dxa_rate
         print(f'Ожидается, прибавилось {tokens_amount} токенов')
         return tokens_amount
@@ -82,6 +76,7 @@ class TestEnergyGift:
     def test_gift_eu_for_low_parcel(self):
         # активация пакетов перед запуском тестов
         self.activate_energy(AUTH_EU_GIFTS)
+
         time.sleep(2)
 
         current_units_balance = self.get_inactive_units_balance(AUTH_EU_GIFTS)
