@@ -321,6 +321,35 @@ class Dexart_api:
         print("Роялти успешно выданы.")
         return result
 
+    """Gravity Guys methods B2C"""
+
+    @staticmethod  # начало гонки на конкретном уровне гравити гайз
+    def start_race(auth_token, room_id):
+        resource = '/api/v1/gravity-guys/records/user-record/start-race'
+        url = DEXART + resource
+        print(f'URL: {url}')
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        payload = json.dumps({'room_uid': room_id})
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    @staticmethod  # получение бустеров юзера по типу бустера
+    def user_boosters_by_type(auth_token, type_id):
+        resource = f'/api/v1/gravity-guys/boosters/by-type?type_id={type_id}'
+        url = DEXART + resource
+        print(f'URL: {url}')
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        result = Http_method.get(url, headers)
+        print(f'Response: {result.text}')
+        return result
+
 
 class Nft_api:
     """NFT каталог"""
@@ -612,7 +641,3 @@ class Spacad_api:
         result = Http_method.get(url, headers)
         print(f'Response: {result.text}')
         return result
-
-
-
-

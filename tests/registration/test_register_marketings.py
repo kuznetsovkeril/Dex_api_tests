@@ -9,6 +9,7 @@ from utilities.utilities import Instruments
 @pytest.fixture
 def register(ref_id, slug):
     email = Instruments.generate_unique_email()  # генерация уникального email
+    print(email)
     result_reg = Dexart_api.register_with_mail(email, ref_id, partner_slug=slug)
     # проверка статус кода
     print(f'Фактический статус код: {result_reg.status_code}')
