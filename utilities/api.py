@@ -666,3 +666,15 @@ class Office_api:
         result = Http_method.post(url, payload, headers)
         print(f'Response: {result.text}')
         return result
+
+    @staticmethod
+    def super_table(base_url, table):
+        resource = f'/super/testing/showTable'
+        url = base_url + resource
+
+        payload = f'table={table}'
+        headers = {'Content-Type': 'application/json'}
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        #print(f'Response: {result.text}')
+        return result
