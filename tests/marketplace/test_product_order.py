@@ -11,7 +11,7 @@ from utilities.getters import Getters
 
 @pytest.fixture
 def auth_token():
-    return AUTH_BUY_GG_FOR_ORDERS
+    return AUTH_GG_ORDERS
 
 
 @pytest.fixture
@@ -80,7 +80,7 @@ class TestMarketplaceProducts:
         assert dxa_amount == order_dxa_amount == 1, "Wrong dxa amount!"
 
         # проверка, что билеты действительно были куплены и у юзера есть доступ к мероприятию
-        time.sleep(1)
+        time.sleep(2)
         assert self.start_race(auth_token, room_id) == 0, "User doesn't have ticket!"
 
     """Проверка заказа бустеров"""
@@ -94,8 +94,8 @@ class TestMarketplaceProducts:
     def test_booster_order(self, old_boosters_amount, buy_booster, auth_token, booster_id, amount, room_id,
                            booster_cost, type_id, uses, test_name):
         # данные заказа из ответа покупки
-        order_id = buy_booster["id"]
-        dxa_amount = buy_booster["dxa_amount"]
+        order_id = buy_booster["order"]["id"]
+        dxa_amount = buy_booster["order"]["dxa_amount"]
 
         # данные заказа из ответа проверки заказа
         order = self.get_order_data(order_id=order_id)
@@ -104,5 +104,5 @@ class TestMarketplaceProducts:
         assert dxa_amount == order_dxa_amount == expected_dxa_amount, "Wrong dxa amount!"
 
         # проверка, что бустеры действительно были куплены и они доступны юзеру
-        time.sleep(1)
+        time.sleep(2)
         assert self.get_user_boosters(auth_token, type_id) == amount * uses + old_boosters_amount, "Wrong booster amount!"

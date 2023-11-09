@@ -41,6 +41,7 @@ class Dexart_api:
         return result
 
     """Получение информации по юзеру"""
+
     @staticmethod
     def user_info(auth_token):
         resource = '/api/v1/user'
@@ -532,7 +533,6 @@ class Energy_api:
 
 
 class Spacad_api:
-
     """проверка доступа к мероприятию по времени и вайт листу"""
 
     # проверка на доступ к ивенту
@@ -589,6 +589,7 @@ class Spacad_api:
         return result
 
     """Метод установки респисания рекламы"""
+
     @staticmethod
     def set_working_hours(start_time, end_time, settings):
         resource = f'/api/v1/coinglue/hours'
@@ -632,12 +633,36 @@ class Spacad_api:
         print(f'Response: {result.text}')
         return result
 
-    @staticmethod # получение текущей сессии пользователя
+    @staticmethod  # получение текущей сессии пользователя
     def current_session(email):
         resource = f'/api/v1/coinglue/session?email={email}'
         headers = {'Content-Type': 'application/json'}
         url = COINGLUE + resource
         print(f'URL: {url}')
         result = Http_method.get(url, headers)
+        print(f'Response: {result.text}')
+        return result
+
+
+"""API различных кабинетов"""
+
+
+class Office_api:
+
+    @staticmethod
+    def list_marketplace(base_url, auth):
+        resource = f'/transaction/listMarketplace'
+        url = base_url + resource
+
+        payload = json.dumps({
+            "auth": auth,
+            "lang": "en",
+            "request": "{\"cmd\":\"get\",\"offset\":0,\"limit\":25,\"sort\":[{\"field\":\"mdate\","
+                       "\"direction\":\"desc\"}]"
+        })
+        print(payload)
+        headers = {'Content-Type': 'application/json'}
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
         print(f'Response: {result.text}')
         return result
