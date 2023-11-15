@@ -351,6 +351,23 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    """Cryptopolia API"""
+
+    # check cryptopolia user
+
+    @staticmethod
+    def cryptopolia_user(auth_token):
+        resource = f'/api/v1/cryptopolia/user'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        url = DEXART + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
+        print(f'Response: {result.text}')
+        return result
+
 
 class Nft_api:
     """NFT каталог"""

@@ -1,12 +1,14 @@
 import json
 
+from playwright.sync_api import Page
+
 """Методы получения необходимых данных из JSON"""
 
 
 class Getters():
 
     @staticmethod  # поиск конкретных данных из ответа json с множеством объектов, например,нужно найти какое-то поле у юзера для nft с id 48
-    #этот метод пока не использовался, но может
+    # этот метод пока не использовался, но может
     def get_field_value_among_objects(result, field_name_1, field_name_2, searched_value, field_name_3):
         data = json.load(result.text)
         for item in data[field_name_1]:
@@ -24,14 +26,14 @@ class Getters():
         print(f'Значение в поле "{field_name_1}": {field_value}')
         return field_value
 
-    @staticmethod # получаем поле с множеством объектов на втором уровне вложенности
+    @staticmethod  # получаем поле с множеством объектов на втором уровне вложенности
     def get_json_field_value(result, field_name_1, field_name_2, index, field_name_3):
         json_response = json.loads(result.text)
         field_value = json_response[field_name_1][field_name_2][index][field_name_3]
         print(f'Значение из объекта #{index + 1} в поле "{field_name_3}": {field_value}')
         return field_value
 
-    @staticmethod # простое получение значения поля на втором уровне вложенности
+    @staticmethod  # простое получение значения поля на втором уровне вложенности
     def get_json_field_value_2(result, field_name_1, field_name_2):
         json_response = json.loads(result.text)
         field_value = json_response[field_name_1][field_name_2]
@@ -52,14 +54,14 @@ class Getters():
         print(f'Значение в поле "{field_name_4}": {field_value}')
         return field_value
 
-    @staticmethod # получение значения поля с вложенными объектами в первом уровне
+    @staticmethod  # получение значения поля с вложенными объектами в первом уровне
     def get_object_json_field_value(result, field_name_1, index, field_name_2):
         json_response = json.loads(result.text)
         field_value = json_response[field_name_1][index][field_name_2]  # Получаем объект с заданным индексом
         print(f'Значение из объекта #{index + 1} в массиве "{field_name_1}" в поле "{field_name_2}": {field_value}')
         return field_value
 
-    @staticmethod # поиск парселя по статусу и ценовой зоне в конкретном районе
+    @staticmethod  # поиск парселя по статусу и ценовой зоне в конкретном районе
     def get_parcel_by_status(result, status_id, price_zone):
         parsed_json_data = json.loads(result.text)
         free_parcel_id = None
@@ -76,9 +78,23 @@ class Getters():
             raise ValueError("Парсел с заданными параметрами не найден")
         # выводим сообщение, если ничего не найдено
 
-    @staticmethod # метод получения значения поля из множества объектов на третьем уровне вложенности
+    @staticmethod  # метод получения значения поля из множества объектов на третьем уровне вложенности
     def get_object_json_field_value_3(result, field_name_1, index, field_name_2, field_name_3):
         json_response = json.loads(result.text)
-        field_value = json_response[field_name_1][index][field_name_2][field_name_3]  # Получаем объект с заданным индексом
+        field_value = json_response[field_name_1][index][field_name_2][
+            field_name_3]  # Получаем объект с заданным индексом
         print(f'Значение из объекта #{index + 1} в поле "{field_name_2}.{field_name_3}": {field_value}')
         return field_value
+
+    """Method for UI tests"""
+
+    @staticmethod
+    def get_cookie_value(page: Page, cookie_name):
+        cookies = page.context.cookies()
+        for cookie in cookies:
+            if cookie["name"] == cookie_name:
+                cookie_value = cookie["value"]
+                print(f'Cookie "{cookie_name}" = "{cookie_value}"')
+                return cookie_value
+        else:
+            raise ValueError("Cookie not found")

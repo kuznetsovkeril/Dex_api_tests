@@ -117,6 +117,7 @@ class TestUserSession:
         session_id = result_first_watch["id"]
 
         """STEP 1"""
+        print("STEP 1")
         # проверяю, что кол-во монет = 1
         coins_first = result_first_watch["coins"]
         Checking.assert_values(1, coins_first)
@@ -126,7 +127,7 @@ class TestUserSession:
         Checking.assert_values(current_session, result_first_watch)
 
         """STEP 2"""
-
+        print("STEP 2")
         # проверка, что в сессии прибавилась еще одна монетка
         previous_coins = current_session["coins"]
         time.sleep(56)
@@ -146,6 +147,7 @@ class TestUserSession:
         Checking.assert_values(next_watch, self.current_session(email))
 
         """STEP 3"""  # аналогичный шагу 2
+        print("STEP 3")
         session_2 = self.current_session(email)
         previous_coins_2 = session_2["coins"]
         time.sleep(58)
@@ -158,6 +160,7 @@ class TestUserSession:
         Checking.assert_values(next_watch_3, self.current_session(email))
 
         """STEP 4"""  # после неуспешного сбора данные сессии не изменятся
+        print("STEP 4")
         session_3 = self.current_session(email)
         time.sleep(30)
         print("ОЖИДАНИЕ 30 СЕКНУДОВ")

@@ -37,16 +37,17 @@ class TestCoinsScaleData:
         session_data = json.loads(result.text)["data"]
         return session_data
 
-    @staticmethod # проверка данных прогресса для шкалы
+    @staticmethod  # проверка данных прогресса для шкалы
     def check_progress(session_data):
         coins = session_data["coins"]  # получаю кол-во монет в сессии
         max_limit = session_data["max_limit"]  # получаю максимальный лимит
         actual_progress = session_data["progress"]  # получаю данные прогресса
-        expected_progress = coins / int(max_limit) * 100  # формула расчета прогресса, надо проверить как окургляется и добавить тоже
+        expected_progress = coins / int(
+            max_limit) * 100  # формула расчета прогресса, надо проверить как окургляется и добавить тоже
         print(f"EXPECTED PROGRESS: {expected_progress}")
         Checking.assert_values(expected_progress, actual_progress)
 
-    @staticmethod # проверка данных прогресса для шкалы
+    @staticmethod  # проверка данных прогресса для шкалы
     def check_coins_left(session_data):
         coins = session_data["coins"]  # получаю кол-во монет в сессии
         max_limit = session_data["max_limit"]  # получаю максимальный лимит
@@ -68,7 +69,6 @@ class TestCoinsScaleData:
         Checking.assert_values("3", actual_min_limit)  # выставил фиксировано 3
 
     def test_progress_and_coins_left(self, set_spacad_ad, email, signature):
-
         """STEP 1. После первого сбора"""
         # проверяю по данным сессии
         session_1 = self.current_session(email)  # данные сессии первого сбора

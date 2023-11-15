@@ -2,6 +2,7 @@ import time
 from datetime import timedelta, datetime
 
 import pytest
+from playwright.sync_api import sync_playwright
 
 from utilities.api import Spacad_api
 from utilities.getters import Getters
@@ -52,3 +53,13 @@ def check_session(email):
         else:
             print("Session not finished yet.")
             time.sleep(20)
+
+
+# launch and close browser
+@pytest.fixture()
+def browser_page():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        page = browser.new_page()
+        yield page
+        browser.close()
