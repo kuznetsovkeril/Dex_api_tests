@@ -1,5 +1,4 @@
 import pytest
-from playwright.sync_api import sync_playwright
 from pages.login_page import LoginPage
 from config_check import *
 from utilities.api import Dexart_api
@@ -39,7 +38,7 @@ class TestCryptopoliaLink:
     def test_set_cryptopolia_link_on_register(self, browser_page):
         cryptopolia_link = "?group=Cryptopolia&uuid="
         uuid = "387665745"
-        # generate new unique email
+        # generate a new unique email
         email = Instruments.generate_unique_email()
         # open browser from fixture
         page = browser_page
@@ -51,7 +50,7 @@ class TestCryptopoliaLink:
         self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
 
         # also need to check that user is cryptopolian partenr (No dexartmarket access)
-
+    @pytest.mark.prod
     def test_set_cryptopolia_link_on_login(self, browser_page):
         cryptopolia_link = "?group=Cryptopolia&uuid="
         uuid = "387665745"

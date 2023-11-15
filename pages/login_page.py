@@ -1,24 +1,13 @@
 import time
 
+from utilities.getters import Getters
+
 
 class LoginPage:
 
     def __init__(self, page, base_url):
         self.page = page
         self.base_url = base_url
-
-    def check_auth(self, email):
-        # get all cookies
-        cookies = self.page.context.cookies()
-        print(cookies)
-        for cookie in cookies:
-            if cookie["name"] == "accountEmail":
-                account_email = cookie["value"]
-                print(account_email)
-                break
-        else:
-            raise ValueError("Cookie not found")
-        assert email == account_email, "Wrong account email"
 
     def email_login(self, email, password):
         self.page.goto(self.base_url)
@@ -28,7 +17,9 @@ class LoginPage:
         self.page.get_by_label("Password").fill(password)
         self.page.keyboard.press('Enter')
         time.sleep(3)
-        self.check_auth(email)
+        # check that auth executed correctly
+        account_email = Getters.get_cookie_value(self.page, "accountEmail")
+        assert account_email == email, "Wrong account email"
 
     def email_register(self, email, password):
         self.page.goto(self.base_url)
@@ -41,7 +32,8 @@ class LoginPage:
             "img").click()
         self.page.get_by_label("Password").press("Enter")
         time.sleep(3)
-        self.check_auth(email)
+        account_email = Getters.get_cookie_value(self.page, "accountEmail")
+        assert account_email == email, "Wrong account email"
 
     def google_login(self):
         pass
@@ -51,4 +43,3 @@ class LoginPage:
 
     def wallet_login(self):
         pass
-
