@@ -84,6 +84,7 @@ class TestMarketplaceProducts:
         assert self.start_race(auth_token, room_id) == 0, "User doesn't have ticket!"
 
     """Проверка заказа бустеров"""
+
     @pytest.mark.parametrize("booster_id, amount, room_id, booster_cost, type_id, uses, test_name",
                              [(3, 1, "Air Test", 5, 1, 10, "Test "),
                               (4, 3, "Pool", 10, 2, 10, "Test "),
@@ -105,4 +106,4 @@ class TestMarketplaceProducts:
 
         # проверка, что бустеры действительно были куплены и они доступны юзеру
         time.sleep(2)
-        assert self.get_user_boosters(auth_token, type_id) == amount * uses + old_boosters_amount, "Wrong booster amount!"
+        assert self.get_user_boosters(auth_token,type_id) == amount * uses + old_boosters_amount, "Wrong boosters amount!"

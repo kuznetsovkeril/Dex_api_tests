@@ -39,6 +39,7 @@ def first_watch(email, signature):
     yield result_watch_data
 
 
+@pytest.mark.skip(reason="The Project has been stopped")
 class TestUserSession:
 
     #

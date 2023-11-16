@@ -74,6 +74,7 @@ def set_schedule_params(request):
     print(f"Откатил расписание после теста: {test_name}")
 
 
+@pytest.mark.skip(reason="The Project has been stopped")
 class TestWatchWithSchedule:
     """Проверка отправки события и доступа к мероприятию при различном расписании"""  # на проде не проверить
 

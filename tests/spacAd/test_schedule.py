@@ -9,6 +9,7 @@ from utilities.checking import Checking
 from utilities.getters import Getters
 
 
+@pytest.mark.skip(reason="The Project has been stopped")
 class TestSpacAdSchedule:
 
     """Проверка работы расписания"""  # скорее всего это будет актуально и для прода

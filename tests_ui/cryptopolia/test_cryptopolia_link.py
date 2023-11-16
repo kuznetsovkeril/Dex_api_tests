@@ -16,15 +16,6 @@ def register_with_email():
     yield email
 
 
-@pytest.fixture
-def register_in_oton():
-    email = Instruments.generate_unique_email()  # генерация уникального email
-    result_reg = Dexart_api.register_with_mail(email, ref=None, partner_slug=None)
-    # проверка статус кода
-    Checking.check_status_code(result_reg, 200)
-    yield email
-
-
 class TestCryptopoliaLink:
 
     @staticmethod
@@ -49,11 +40,17 @@ class TestCryptopoliaLink:
         auth_token = Getters.get_cookie_value(page, "accountToken")
         self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
 
-        # also need to check that user is cryptopolian partenr (No dexartmarket access)
-    @pytest.mark.prod
-    def test_set_cryptopolia_link_on_login(self, browser_page):
+    @pytest.mark.prod  # check with user oton, it's the same as other drivers
+    def test_set_cryptopolia_link_on_login(self, register_with_email, browser_page):
         cryptopolia_link = "?group=Cryptopolia&uuid="
         uuid = "387665745"
+        # register firs
+        email = register_with_email
         page = browser_page
+        # then auth
         lp = LoginPage(page, BASE_URL + cryptopolia_link + uuid)
-        lp.email_login("test@fexbox.org", "1qazXSW@")
+        lp.email_login(email, "1qazXSW@")
+        # check that my user become a Cryptopolist
+        auth_token = Getters.get_cookie_value(page, "accountToken")
+        self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
+

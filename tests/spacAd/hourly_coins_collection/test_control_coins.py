@@ -8,6 +8,7 @@ from utilities.checking import Checking
 from utilities.getters import Getters
 
 
+@pytest.mark.skip(reason="The Project has been stopped")
 class TestControlCoinsCollection:
 
     """Проверка ограничения 60 сек между монетами и максимума монет за сессию"""  # на проде не проверить

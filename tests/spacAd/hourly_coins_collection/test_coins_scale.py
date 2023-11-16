@@ -19,6 +19,7 @@ def signature():
     return WATCH_SIGNATURE
 
 
+@pytest.mark.skip(reason="The Project has been stopped")
 class TestCoinsScaleData:
     """Проверка данных для шкалы монет в unity"""  # на проде не проверить
 
