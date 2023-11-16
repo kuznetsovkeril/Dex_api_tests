@@ -35,11 +35,20 @@ class LoginPage:
         account_email = Getters.get_cookie_value(self.page, "accountEmail")
         assert account_email == email, "Wrong account email"
 
+    def login_with_cookie(self, value):
+        self.page.goto(self.base_url)
+        self.page.context.add_cookies([{"name": "accountToken", "value": value, "url": self.base_url}])
+        self.page.context.add_cookies([{"name": "accountEmail", "value": value, "url": self.base_url}])
+        self.page.reload()
+
+    # impossible due to privacy
     def google_login(self):
         pass
 
+    # impossible due to captcha
     def oton_login(self):
         pass
 
+    # impossible due to extension
     def wallet_login(self):
         pass
