@@ -78,6 +78,16 @@ class Getters():
             raise ValueError("Парсел с заданными параметрами не найден")
         # выводим сообщение, если ничего не найдено
 
+    @staticmethod
+    def get_user_parcels(result):
+        result_json = json.loads(result.text)
+        parcels_list = []
+        for item in result_json["data"]:
+            for parcel in item["parcels"]:
+                parcels_list.append(parcel["id"])
+        print(parcels_list)
+        return parcels_list
+
     @staticmethod  # метод получения значения поля из множества объектов на третьем уровне вложенности
     def get_object_json_field_value_3(result, field_name_1, index, field_name_2, field_name_3):
         json_response = json.loads(result.text)

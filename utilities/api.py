@@ -202,6 +202,26 @@ class Dexart_api:
         result = Http_method.get(url, headers)
         return result
 
+    """Возврат парселя в оборот"""
+
+    @staticmethod
+    def return_parcel(parcel_ids):
+        resource = '/api/v1/app/parcels/return'
+        url = DEXART + resource
+
+        payload = json.dumps({
+            "parcels": parcel_ids
+        })
+        headers = {
+            'api-key': API_KEY,
+            'Content-Type': 'application/json'
+        }
+
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
     """Добавление парселя в коризну"""
 
     @staticmethod
@@ -237,6 +257,19 @@ class Dexart_api:
         print(f'URL: {url}')
         result = Http_method.post(url, payload, headers)
         print(f'Response: {result.text}')
+        return result
+
+    """Получение парселей юзера"""
+    @staticmethod
+    def get_user_parcels(auth_token):
+        resource = '/api/v1/user/parcels'
+        url = DEXART + resource
+        print(f'URL: {url}')
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        result = Http_method.get(url, headers)
         return result
 
     """Блок 2FA"""

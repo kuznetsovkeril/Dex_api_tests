@@ -16,7 +16,7 @@ class Instruments:
 
     @staticmethod
     def approximately_equal(x, y, tolerance):
-        return abs(x - y) <= tolerance
+        return abs(x - y) <= tolerance  # abs возвращает абсолютное значение, т е модуль разницы
 
     # value1 = 200
     # value2 = 250
@@ -53,7 +53,7 @@ class Instruments:
         round_num = round(num, index)  # Округляем до двух знаков после запятой
         print(round_num)
 
-    """Метод округления числа"""
+    """Генерация 2FA"""
     @staticmethod
     def generate_2fa_code(secret):
         # секретный ключ гугл auth
