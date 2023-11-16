@@ -11,6 +11,10 @@ from pages.login_page import LoginPage
 
 class TestEnergyUnitsPage:
 
+    """Tests link to Energy units landing and its working"""
+
+    # test Get Energy UNITS button, that it is available for all users
+
     @pytest.mark.parametrize("auth_token, test_name", [
         (AUTH_DEXART_WALLET, "Test EU for Low zone parcel"),
         (AUTH_GOOGLE_ATON, "Test google aton"),
@@ -31,3 +35,12 @@ class TestEnergyUnitsPage:
         page1 = page1_info.value
         expect(page1).to_have_title("DEXART Metaverse Tokens Staking")
 
+    def test_set_email_and_auth_on_landing(self):
+        # data saved in cookies
+        # I see my mail in form
+        # the email is disabled
+        # check order
+        pass
+
+    def test_go_direct_link_to_landing(self):
+        pass
