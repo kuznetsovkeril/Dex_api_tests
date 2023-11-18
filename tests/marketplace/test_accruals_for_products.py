@@ -65,10 +65,10 @@ class TestProductsAccruals:
     """Проверка начислений за бустер в партнерских кабинетах"""
 
     @pytest.mark.parametrize("auth_token, office_url, booster_id, test_name",
-                             [(AUTH_ATON_USER, "https://aton-dev.108dev.ru", 3, "Test accrual for booster in ATON"),
-                              (AUTH_SPACAD_USER, "https://spacad-dev.108dev.ru", 3,
+                             [(AUTH_ATON_USER, "https://aton-dev.108dev.ru", 6, "Test accrual for booster in ATON"),
+                              (AUTH_SPACAD_USER, "https://spacad-dev.108dev.ru", 6,
                                "Test accrual for booster in SPACAD"),
-                              (AUTH_UP2U_USER, "https://up-dev.108dev.ru", 3, "Test accrual for booster in UP2U")])
+                              (AUTH_UP2U_USER, "https://up-dev.108dev.ru", 6, "Test accrual for booster in UP2U")])
     def test_partners_boosters_accruals(self, auth_token, office_url, booster_id, test_name):
         order_id = str(self.buy_booster(auth_token, booster_id))
         time.sleep(5)

@@ -38,19 +38,18 @@ class TestEnergyUnitsPage:
         page1 = page1_info.value
         expect(page1).to_have_title("DEXART Metaverse Tokens Staking")
 
+    # check if
     def test_set_email_and_auth_on_landing(self, browser_page):
         email = "test@fexbox.org"
         # open browser and login
         page = browser_page
         lp = LoginPage(page, BASE_URL)
-        lp.email_login(email, "1qazXSW@")
+        lp.email_login(email=email, password="1qazXSW@")
 
         # go to TPF and go to Energy landing
         page.goto(BASE_URL + "/balance")
         page.get_by_role("link", name="Parcels").click()
         page.get_by_role("button", name="Your Energy Units are now at the Factory").click()
-        page.get_by_role("link", name="Get Energy UNITS").click()
-
         # init a new page
         with page.expect_popup() as page1_info:
             page.get_by_role("link", name="Get Energy UNITS").click()
@@ -60,20 +59,28 @@ class TestEnergyUnitsPage:
         page1.get_by_role("button", name="Accept Cookies").click()
         # pick up first package
         page1.locator(".packagesBox__plusMinus").first.click()
+        time.sleep(10)
         # click button buy -> the form opened
-        page.get_by_role("button", name="Buy").click()
+        page1.get_by_role("button", name="Buy").click()
 
         # assertions
-        # check that email field is disabled
-        # expect.page.is_disabled('input[type="email"]')
+        time.sleep(1)
+        email_input_vale = page1.evaluate('''() => {
+        const input = document.querySelector('input[type="email"]');
+        return input ? input.value : null;
+    }''')
+        print(email_input_vale)
+        assert email_input_vale == email
 
+    # check if the email input is disabled
     def test_email_input_disabled(self, browser_page):
         page = browser_page
         page.goto(f'{BASE_ENERGY_URL}/?email=kirtest@fexbox.org&token={AUTH_KIRTEST}')
-        page.wait_for_selector('button[type="button"]').click()
-        page.wait_for_selector('div[class="packagesBox__plusMinus"]').click()
-        page.get_by_role("button", name="Buy").click()
-        assert page.is_disabled('input[type="email"]')
+        page.get_by_role("button", name="Accept Cookies").click()
 
-    def test_go_direct_link_to_landing(self):
-        pass
+        # also possible code: page.wait_for_selector('div[class="packagesBox__plusMinus"]').click()
+        page.click('div[class="packagesBox__plusMinus"]')
+        page.get_by_role("button", name="Buy").click()
+
+        # also possible code: assert page.get_by_placeholder("Your email").is_disabled()
+        assert page.is_disabled('input[type="email"]')
