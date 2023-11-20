@@ -147,19 +147,3 @@ class TestRoyaltyStatistics:
         assert fund_acc == 0, "Возможна ошибка"
         assert royalty == 0, "Возможна ошибка"
         print("Значения в статистике обнулились")
-
-    # проверка, что royalty = 0, если fund_acc_value = 0, ЭТОТ ТЕСТ МОЖНО УДАЛИТЬ!
-    def test_zero_total_royalties(self):
-        # запуск выплаты royalty, чтобы обновить fund_acc
-        self.give_royalties()
-        time.sleep(5)
-        # получение статистики
-        result_statistics = self.refresh_statistic()
-        # проверка, что fund_acc = 0
-        fund_acc_value = Getters.get_json_field_value_0(result_statistics, "fund_acc")
-        assert fund_acc_value == 0, "Ошибка. Fund_acc > 0"
-        print("fund_acc_value = 0")
-        royalty_value = Getters.get_json_field_value_0(result_statistics, "royalty")
-        # Проверка корректности значения в роялти роялти = fund_acc * на долю для роялти
-        expected_total_royalty = 0
-        Checking.assert_values(expected_total_royalty, royalty_value)

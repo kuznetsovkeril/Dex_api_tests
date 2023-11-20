@@ -46,8 +46,6 @@ class TestEnergyUnitsPage:
         lp = LoginPage(page, BASE_URL)
         lp.email_login(email=email, password="1qazXSW@")
 
-        # get auth token
-
         # go to TPF and go to Energy landing
         page.goto(BASE_URL + "/balance")
         page.get_by_role("link", name="Parcels").click()

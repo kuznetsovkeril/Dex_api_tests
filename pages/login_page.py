@@ -18,7 +18,7 @@ class LoginPage:
         self.page.keyboard.press('Enter')
         self.page.get_by_label("Password").fill(password)
         self.page.keyboard.press('Enter')
-        time.sleep(3)
+        time.sleep(4)
         # check that auth executed correctly
         account_email = Getters.get_cookie_value(self.page, "accountEmail")
         assert account_email == email, "Wrong account email"

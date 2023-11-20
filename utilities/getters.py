@@ -1,7 +1,5 @@
 import json
 
-from playwright.sync_api import Page
-
 """Методы получения необходимых данных из JSON"""
 
 
@@ -99,8 +97,9 @@ class Getters():
     """Method for UI tests"""
 
     @staticmethod
-    def get_cookie_value(page: Page, cookie_name):
+    def get_cookie_value(page, cookie_name):
         cookies = page.context.cookies()
+        print(cookies)
         for cookie in cookies:
             if cookie["name"] == cookie_name:
                 cookie_value = cookie["value"]

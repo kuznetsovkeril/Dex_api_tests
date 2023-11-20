@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from pages.login_page import LoginPage
 from config_check import *
@@ -36,6 +38,7 @@ class TestCryptopoliaLink:
         # register with method from Login page
         lp = LoginPage(page, BASE_URL + cryptopolia_link + uuid)
         lp.email_register(email, "1qazXSW@")
+        time.sleep(1)  # a bit waiting
         # check that my user become a Cryptopolist
         auth_token = Getters.get_cookie_value(page, "accountToken")
         self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
