@@ -40,6 +40,7 @@ def old_boosters_amount(auth_token, type_id):
     yield booster_amount
 
 
+
 class TestMarketplaceProducts:
 
     @staticmethod
@@ -86,12 +87,12 @@ class TestMarketplaceProducts:
     """Проверка заказа бустеров"""
 
     @pytest.mark.parametrize("booster_id, amount, room_id, booster_cost, type_id, uses, test_name",
-                             [(3, 1, "Air Test", 5, 1, 10, "Test "),
-                              (4, 3, "Pool", 10, 2, 10, "Test "),
-                              (5, 2, "Fork", 25, 3, 10, "Test "),
-                              (6, 1, "Air Test", 100, 4, 10, "Test "),
-                              (7, 1, "Pool", 50, 4, 5, "Test "),
-                              (8, 1, "Fork", 10, 4, 2, "Test ")])
+                             [(3, 1, "Air Test", 5, 1, 10, "Test order booster id 3"),
+                              (4, 3, "Pool", 10, 2, 10, "Test order booster id 4"),
+                              (5, 2, "Fork", 25, 3, 10, "Test order booster id 5"),
+                              (6, 1, "Air Test", 100, 4, 10, "Test order booster id 6"),
+                              (7, 1, "Pool", 50, 4, 5, "Test order booster id 7"),
+                              (8, 1, "Fork", 10, 4, 2, "Test order booster id 8")])
     def test_booster_order(self, old_boosters_amount, buy_booster, auth_token, booster_id, amount, room_id,
                            booster_cost, type_id, uses, test_name):
         # данные заказа из ответа покупки
@@ -106,4 +107,7 @@ class TestMarketplaceProducts:
 
         # проверка, что бустеры действительно были куплены и они доступны юзеру
         time.sleep(2)
-        assert self.get_user_boosters(auth_token,type_id) == amount * uses + old_boosters_amount, "Wrong boosters amount!"
+        assert self.get_user_boosters(auth_token, type_id) == amount * uses + old_boosters_amount, "Wrong boosters amount!"
+
+    def test_generator_order(self):
+        pass
