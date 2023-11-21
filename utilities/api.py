@@ -707,7 +707,7 @@ class Office_api:
         payload = json.dumps({
             "auth": auth,
             "lang": "en",
-            "request": "{\"cmd\":\"get\",\"offset\":0,\"limit\":25,\"sort\":[{\"field\":\"mdate\","
+            "request": "{\"cmd\":\"get\",\"offset\":0,\"limit\":50,\"sort\":[{\"field\":\"mdate\","
                        "\"direction\":\"desc\"}]"
         })
         print(payload)

@@ -25,12 +25,16 @@ class TestParcelAccruals:
         else:
             raise ValueError("Order was not found in marketplaces")
 
+    """TESTS"""
+
     """Check accruals in partners offices for parcel purchase"""
 
     @pytest.mark.parametrize("auth_token, price_zone, office_url, test_name",
                              [(AUTH_ATON_USER, "LOW", "https://aton-dev.108dev.ru", "Test accrual for parcel in ATON"),
-                              (AUTH_SPACAD_USER, "MEDIUM", "https://spacad-dev.108dev.ru", "Test accrual for parcel in SPACAD"),
-                              (AUTH_UP2U_USER_WALLET, "HIGH", "https://up-dev.108dev.ru", "Test accrual for parcel in UP2U")])
+                              (AUTH_SPACAD_USER, "MEDIUM", "https://spacad-dev.108dev.ru",
+                               "Test accrual for parcel in SPACAD"),
+                              (AUTH_UP2U_USER_WALLET, "HIGH", "https://up-dev.108dev.ru",
+                               "Test accrual for parcel in UP2U")])
     def test_partners_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, office_url, test_name):
         order_id = str(buy_parcel)
         print(order_id)
@@ -38,6 +42,7 @@ class TestParcelAccruals:
         self.search_order_in_marketplace(office_url, order_id=order_id)
 
     """Check accruals for parcel in dexart marketing"""
+
     @pytest.mark.parametrize("auth_token, price_zone",
                              [(AUTH_DEXART_REF, "LOW")])
     def test_dexmarket_accruals_for_parcel(self, buy_parcel, auth_token, price_zone):
@@ -68,3 +73,21 @@ class TestParcelAccruals:
         else:
             raise ValueError("Wrong transaction amount!")
 
+    """Check accruals for parcel in OTON marketing"""
+
+    @pytest.mark.parametrize("auth_token, price_zone, oton_auth",
+                             [(AUTH_OTON_USER, "LOW", "1325493708.yr9KmfBd4Eri4zAYhmD744I2PJhQLiFt4HQsHdmwijAoEPLnZI")])
+    def test_oton_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, oton_auth):
+
+        order_id = buy_parcel
+
+        time.sleep(3)
+        market_place = Office_api.list_marketplace(OTON, oton_auth)
+        data = json.loads(market_place.text)
+
+        for item in data["data"]["records"]:
+            if str(order_id) in item["product"]:
+                print(f'Order id was found in {item}')
+                break
+        else:
+            raise ValueError("Order was not found in marketplaces")
