@@ -105,9 +105,9 @@ class Dexart_api:
             'Authorization': 'Bearer ' + auth_token
         }
         print(f'URL: {url}')
-        print(f'All headers: {headers}')
+        # print(f'All headers: {headers}')
         result = Http_method.post(url, payload, headers)
-        print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
     @staticmethod

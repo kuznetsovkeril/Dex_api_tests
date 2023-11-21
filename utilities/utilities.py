@@ -35,7 +35,8 @@ class Instruments:
         # value = округляемое значение
         num = value
         round_num = round(num, index)  # Округляем до двух знаков после запятой
-        print(round_num)
+        print(f'Rounded num: {round_num}')
+        return round_num
 
     """Метод генерации рандомного числа"""
 

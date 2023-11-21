@@ -16,6 +16,7 @@ def register_with_email():
     # проверка статус кода
     Checking.check_status_code(result_reg, 200)
     yield email
+    # here could be user deleting steps
 
 
 class TestCryptopoliaLink:
@@ -47,13 +48,50 @@ class TestCryptopoliaLink:
     def test_set_cryptopolia_link_on_login(self, register_with_email, browser_page):
         cryptopolia_link = "?group=Cryptopolia&uuid="
         uuid = "387665745"
-        # register firs
+        # register first
         email = register_with_email
         page = browser_page
         # then auth
         lp = LoginPage(page, BASE_URL + cryptopolia_link + uuid)
         lp.email_login(email, "1qazXSW@")
         # check that my user become a Cryptopolist
+        time.sleep(1)
         auth_token = Getters.get_cookie_value(page, "accountToken")
         self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
 
+    @pytest.mark.prod  # check with user oton, it's the same as other drivers
+    def test_set_cryptopolia_being_authed(self, register_with_email, browser_page):
+        cryptopolia_link = "?group=Cryptopolia&uuid="
+        uuid = "387665745"
+        # register first
+        email = register_with_email
+        page = browser_page
+        # then auth
+        lp = LoginPage(page, BASE_URL)
+        lp.email_login(email, "1qazXSW@")
+
+        # go by cryptopolia link
+        page.goto(BASE_URL + cryptopolia_link + uuid)
+        time.sleep(1)
+        # check that my user become a Cryptopolist
+        auth_token = Getters.get_cookie_value(page, "accountToken")
+        self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
+
+    # check ref data priority
+    @pytest.mark.prod  # check with user oton, it's the same as other drivers
+    def test_set_cryptopolia_being_authed(self, register_with_email, browser_page):
+        cryptopolia_link = "?group=Cryptopolia&uuid="
+        uuid = "387665745"
+        # register first
+        email = register_with_email
+        page = browser_page
+        # then auth
+        lp = LoginPage(page, BASE_URL)
+        lp.email_login(email, "1qazXSW@")
+
+        # go by cryptopolia link
+        page.goto(BASE_URL + cryptopolia_link + uuid)
+        time.sleep(1)
+        # check that my user become a Cryptopolist
+        auth_token = Getters.get_cookie_value(page, "accountToken")
+        self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
