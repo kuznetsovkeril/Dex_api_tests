@@ -21,7 +21,7 @@ def activate_units(auth_token):
 
 # this fixture buys a parcel and then returns it in stock
 @pytest.fixture()
-def buy_parcel(auth_token, price_zones):
+def buy_several_parcels(auth_token, price_zones):
     for zone in price_zones:
         result_parcel_list = Dexart_api.get_region_parcels("REGION-15")  # парсинг списка парселей из 15 района
         Checking.check_status_code(result_parcel_list, 200)
@@ -86,7 +86,7 @@ class TestEnergyGift:
         (AUTH_EU_GIFTS, ["MEDIUM"], 9, 45, "Test EU for Medium zone parcel"),
         (AUTH_EU_GIFTS, ["HIGH"], 12, 120, "Test EU for High zone parcel"),
         (AUTH_EU_GIFTS, ["LOW", "MEDIUM", "HIGH"], 28, 190, "Test EU for all zones parcel")])
-    def test_gift_eu_parcels(self, activate_units, buy_parcel, auth_token,
+    def test_gift_eu_parcels(self, activate_units, buy_several_parcels, auth_token,
                              price_zones, expected_units, usd_amount, test_name):
 
         # get dxa rate
