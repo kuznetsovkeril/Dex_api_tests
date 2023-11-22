@@ -23,9 +23,17 @@ class TestParcelAccruals:
                                "Test accrual for parcel in UP2U")])
     def test_partners_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, office_url, test_name):
         order_id = str(buy_parcel)
-        print(order_id)
-        time.sleep(5)
+        time.sleep(3)
         OfficeMarketplacesPage.search_order_in_partners_marketplaces(base_url=office_url, order_id=order_id)
+
+    """Check accruals for parcel in OTON marketing"""
+
+    @pytest.mark.parametrize("auth_token, price_zone, oton_auth",
+                             [(AUTH_OTON_USER, "LOW", USER_DEXART_OTON_AUTH)])
+    def test_oton_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, oton_auth):
+        order_id = buy_parcel
+        time.sleep(3)
+        OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=oton_auth, order_id=order_id)
 
     """Check accruals for parcel in dexart marketing"""
 
@@ -58,15 +66,3 @@ class TestParcelAccruals:
             pass
         else:
             raise ValueError("Wrong transaction amount!")
-
-    """Check accruals for parcel in OTON marketing"""
-
-    @pytest.mark.parametrize("auth_token, price_zone, oton_auth",
-                             [(AUTH_OTON_USER, "LOW", USER_DEXART_OTON_AUTH)])
-    def test_oton_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, oton_auth):
-
-        order_id = buy_parcel
-
-        time.sleep(3)
-
-        OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=oton_auth, order_id=order_id)

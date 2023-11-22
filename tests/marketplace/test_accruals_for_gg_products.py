@@ -61,7 +61,7 @@ class TestProductsAccruals:
                                       "Test accrual for gg-ticket in UP2U")])
     def test_partners_gg_ticket_accruals(self, auth_token, office_url, test_name):
         order_id, dxa_amount = self.buy_gg_ticket(auth_token, "Air Test")
-        time.sleep(5)
+        time.sleep(3)
         OfficeMarketplacesPage.search_order_in_partners_marketplaces(base_url=office_url, order_id=order_id)
 
     """Проверка начислений за билет в OTON"""
