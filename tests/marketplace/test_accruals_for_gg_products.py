@@ -1,10 +1,11 @@
-import json
+
 import time
 
 import pytest
 
 from config_check import *
-from utilities.api import Dexart_api, Office_api
+from pages.office_marketplaces_page import OfficeMarketplacesPage
+from utilities.api import Dexart_api
 from utilities.checking import Checking
 from utilities.getters import Getters
 
@@ -28,19 +29,6 @@ class TestProductsAccruals:
         order_id = Getters.get_json_field_value_3(result, "data", "order", "id")
         dxa_amount = Getters.get_json_field_value_3(result, "data", "order", "dxa_amount")
         return str(order_id), dxa_amount
-
-    @staticmethod
-    def search_order_in_marketplace(base_url, order_id):
-        result = Office_api.super_table(base_url=base_url, table="marketplace")
-        Checking.check_status_code(result, 200)
-        # Поиск нужного номера заказа в описании продукта у ATON, SPACAD, UP2U. У OTON такого нет в описании МПЛ
-        data = json.loads(result.text)
-        for item in data["data"]:
-            if order_id in item["product"]:
-                print(f'Order id was found in {item}')
-                break
-        else:
-            raise ValueError("Order was not found in marketplaces")
 
     @staticmethod
     def get_sponsor_percent(auth_token):
@@ -74,19 +62,18 @@ class TestProductsAccruals:
     def test_partners_gg_ticket_accruals(self, auth_token, office_url, test_name):
         order_id, dxa_amount = self.buy_gg_ticket(auth_token, "Air Test")
         time.sleep(5)
-        self.search_order_in_marketplace(office_url, order_id=order_id)
+        OfficeMarketplacesPage.search_order_in_partners_marketplaces(base_url=office_url, order_id=order_id)
 
     """Проверка начислений за билет в OTON"""
 
     def test_oton_gg_ticket_accruals(self):
-        # price_orig
-        # опираться на дату транзакции +- 15 сек?
-        pass
+        order_id, dxa_amount = self.buy_gg_ticket(AUTH_OTON_USER, "Air Test")
+        time.sleep(3)
+        OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=USER_DEXART_OTON_AUTH, order_id=order_id)
 
     """Проверка начислений за билет в Dexart"""
 
     def test_dexart_gg_ticket_accruals(self):
-
         # buy ticket
         order_id, dxa_amount = self.buy_gg_ticket(AUTH_DEXART_REF, "Pool")
 
@@ -114,14 +101,16 @@ class TestProductsAccruals:
         order_id, dxa_amount = self.buy_booster(auth_token, booster_id)
 
         time.sleep(5)
-        self.search_order_in_marketplace(office_url, order_id=order_id)
+        OfficeMarketplacesPage.search_order_in_partners_marketplaces(base_url=office_url, order_id=order_id)
 
     """Проверка начислений за бустер в OTON"""
 
     def test_oton_booster_accruals(self):
-        # price_orig
-        # опираться на дату транзакции +- 15 сек?
-        pass
+
+        order_id, dxa_amount = self.buy_booster(auth_token=AUTH_OTON_USER, booster_id=3)
+        time.sleep(3)
+        OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=USER_DEXART_OTON_AUTH,
+                                                                 order_id=order_id)
 
     """Проверка начислений за бустеры в Dexart"""
 
