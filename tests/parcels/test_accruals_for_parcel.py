@@ -22,7 +22,7 @@ class TestParcelAccruals:
                               (AUTH_UP2U_USER_WALLET, "HIGH", "https://up-dev.108dev.ru",
                                "Test accrual for parcel in UP2U")])
     def test_partners_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, office_url, test_name):
-        order_id = str(buy_parcel)
+        order_id, parcel_id = buy_parcel
         time.sleep(3)
         OfficeMarketplacesPage.search_order_in_partners_marketplaces(base_url=office_url, order_id=order_id)
 
@@ -31,7 +31,7 @@ class TestParcelAccruals:
     @pytest.mark.parametrize("auth_token, price_zone, oton_auth",
                              [(AUTH_OTON_USER, "LOW", USER_DEXART_OTON_AUTH)])
     def test_oton_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, oton_auth):
-        order_id = buy_parcel
+        order_id, parcel_id = buy_parcel
         time.sleep(3)
         OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=oton_auth, order_id=order_id)
 
@@ -41,7 +41,7 @@ class TestParcelAccruals:
                              [(AUTH_DEXART_REF, "LOW")])
     def test_dexmarket_accruals_for_parcel(self, buy_parcel, auth_token, price_zone):
         # get order id
-        order_id = buy_parcel
+        order_id, parcel_id = buy_parcel
         # check order and get dxa_amount
         dxa_amount = DexartOrderPage.get_odred_dxa_amount(order_id=order_id)
         # get sponsor's ref percent

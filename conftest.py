@@ -81,7 +81,7 @@ def buy_parcel(auth_token, price_zone):
     result_buy_parcel = Dexart_api.buy_parcel(auth_token, driver="balance", email="some_user_email@fexbox.org")
     Checking.check_status_code(result_buy_parcel, 201)
     order_id = Getters.get_json_field_value_2(result_buy_parcel, "data", "id")
-    yield order_id
+    yield str(order_id), parcel_id
     parcel_return = Dexart_api.return_parcel(parcel_ids=[parcel_id])
     Checking.check_status_code(parcel_return, 200)
     print("Parcel returned in stock")
