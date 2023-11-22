@@ -4,6 +4,8 @@ import time
 import pytest
 
 from config_check import *
+from pages.dexart_balance_page import DexartBalancePage
+from pages.dexart_referral_page import DexartReferralPage
 from pages.office_marketplaces_page import OfficeMarketplacesPage
 from utilities.api import Dexart_api
 from utilities.checking import Checking
@@ -29,18 +31,6 @@ class TestProductsAccruals:
         order_id = Getters.get_json_field_value_3(result, "data", "order", "id")
         dxa_amount = Getters.get_json_field_value_3(result, "data", "order", "dxa_amount")
         return str(order_id), dxa_amount
-
-    @staticmethod
-    def get_sponsor_percent(auth_token):
-        user_referral_result = Dexart_api.user_referral_info(auth_token)
-        ref_percent = Getters.get_json_field_value_2(user_referral_result, "data", "percent")
-        return ref_percent
-
-    @staticmethod
-    def get_transaction_amount(auth_token):
-        user_transactions = Dexart_api.user_transaction(auth_token)
-        transaction_amount = Getters.get_object_json_field_value(user_transactions, "data", 0, "amount")
-        return transaction_amount
 
     @staticmethod  # получаем курс DXA
     def get_dxa_rate():
@@ -75,16 +65,15 @@ class TestProductsAccruals:
 
     def test_dexart_gg_ticket_accruals(self):
         # buy ticket
-        order_id, dxa_amount = self.buy_gg_ticket(AUTH_DEXART_REF, "Pool")
+        order_id, dxa_amount = self.buy_gg_ticket(AUTH_DEXART_REF, "Air Test")
 
         # get sponsor's ref percent
-        user_referral_result = Dexart_api.user_referral_info(AUTH_DEXART_SPONSOR)
-        ref_percent = Getters.get_json_field_value_2(user_referral_result, "data", "percent")
+        ref_percent = DexartReferralPage.get_sponsor_percent(AUTH_DEXART_SPONSOR)
 
-        # check transaction in daxart (time and amount)
+        # check transaction in daxart (amount)
         time.sleep(2)
-        user_transactions = Dexart_api.user_transaction(AUTH_DEXART_SPONSOR)
-        transaction_amount = Getters.get_object_json_field_value(user_transactions, "data", 0, "amount")
+
+        transaction_amount = DexartBalancePage.get_last_transaction_amount(AUTH_DEXART_SPONSOR)
 
         expected_amount = dxa_amount * ref_percent / 100
         assert expected_amount == float(transaction_amount), "Wrong transaction amount!"
@@ -127,16 +116,15 @@ class TestProductsAccruals:
         order_id, dxa_amount = self.buy_booster(AUTH_DEXART_REF, booster_id)
 
         # get sponsor's ref percent
-        ref_percent = self.get_sponsor_percent(AUTH_DEXART_SPONSOR)
+        ref_percent = DexartReferralPage.get_sponsor_percent(AUTH_DEXART_SPONSOR)
 
         # check transaction in daxart (time and amount)
         time.sleep(3)
 
-        # get transaction amount
-        transaction_amount = self.get_transaction_amount(AUTH_DEXART_SPONSOR)
-        print(f'TRANSACTION AMOUNT: {transaction_amount}')
+        # get last transaction amount
+        transaction_amount = DexartBalancePage.get_last_transaction_amount(AUTH_DEXART_SPONSOR)
 
         # assertion
         expected_amount = dxa_amount * ref_percent / 100
         print(expected_amount)
-        assert expected_amount == float(transaction_amount), "Wrong transaction amount!"
+        assert expected_amount == transaction_amount, "Wrong transaction amount!"

@@ -4,6 +4,8 @@ import time
 import pytest
 
 from config_check import *
+from pages.dexart_balance_page import DexartBalancePage
+from pages.dexart_referral_page import DexartReferralPage
 from pages.office_marketplaces_page import OfficeMarketplacesPage
 from utilities.api import Dexart_api
 
@@ -47,22 +49,19 @@ class TestParcelAccruals:
         dxa_amount = Getters.get_json_field_value_2(order_info, "data", "dxa_amount")
 
         # get sponsor's ref percent
-        user_referral_result = Dexart_api.user_referral_info(AUTH_DEXART_SPONSOR)
-        ref_percent = Getters.get_json_field_value_2(user_referral_result, "data", "percent")
+        ref_percent = DexartReferralPage.get_sponsor_percent(AUTH_DEXART_SPONSOR)
 
         # check transaction in daxart (time and amount)
         time.sleep(2)
 
-        user_transactions = Dexart_api.user_transaction(AUTH_DEXART_SPONSOR)
-        transaction_amount = Getters.get_object_json_field_value(user_transactions, "data", 0, "amount")
-        transaction_amount_float = float(transaction_amount.replace(",", ""))
+        transaction_amount = DexartBalancePage.get_last_transaction_amount(AUTH_DEXART_SPONSOR)
 
         # expected amount of ref
         expected_amount = float(dxa_amount) * ref_percent / 100
         print(f'expected: {expected_amount}')
 
         # assertion
-        if Instruments.approximately_equal(expected_amount, transaction_amount_float, 50):
+        if Instruments.approximately_equal(expected_amount, transaction_amount, 50):
             pass
         else:
             raise ValueError("Wrong transaction amount!")
