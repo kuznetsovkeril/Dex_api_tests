@@ -9,10 +9,7 @@ from utilities.checking import Checking
 from utilities.getters import Getters
 
 
-@pytest.fixture
-def auth():
-    return OTON_DEXART_USER
-
+# here we check if an order created and purchase successful
 
 class TestProductsAccruals:
 
@@ -119,6 +116,13 @@ class TestProductsAccruals:
         time.sleep(5)
         self.search_order_in_marketplace(office_url, order_id=order_id)
 
+    """Проверка начислений за бустер в OTON"""
+
+    def test_oton_booster_accruals(self):
+        # price_orig
+        # опираться на дату транзакции +- 15 сек?
+        pass
+
     """Проверка начислений за бустеры в Dexart"""
 
     @pytest.mark.parametrize("booster_id, test_name",
@@ -135,8 +139,6 @@ class TestProductsAccruals:
 
         # get sponsor's ref percent
         ref_percent = self.get_sponsor_percent(AUTH_DEXART_SPONSOR)
-
-        rate = self.get_dxa_rate()
 
         # check transaction in daxart (time and amount)
         time.sleep(3)

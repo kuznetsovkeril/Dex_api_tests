@@ -40,7 +40,6 @@ def old_boosters_amount(auth_token, type_id):
     yield booster_amount
 
 
-
 class TestMarketplaceProducts:
 
     @staticmethod
@@ -107,7 +106,5 @@ class TestMarketplaceProducts:
 
         # проверка, что бустеры действительно были куплены и они доступны юзеру
         time.sleep(2)
-        assert self.get_user_boosters(auth_token, type_id) == amount * uses + old_boosters_amount, "Wrong boosters amount!"
-
-    def test_generator_order(self):
-        pass
+        assert self.get_user_boosters(auth_token,
+                                      type_id) == amount * uses + old_boosters_amount, "Wrong boosters amount!"
