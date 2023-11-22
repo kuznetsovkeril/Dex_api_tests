@@ -9,12 +9,12 @@ class OfficeMarketplacesPage:
     @staticmethod
     def search_order_in_oton_marketplaces(base_url, oton_auth, order_id):
 
-        market_place = Office_api.list_marketplace(base_url=base_url, auth=oton_auth)
-        Checking.check_status_code(market_place, 200)
-        data = json.loads(market_place.text)
+        result = Office_api.list_marketplace(base_url=base_url, auth=oton_auth)
+        Checking.check_status_code(result, 200)
+        data = json.loads(result.text)
 
         for item in data["data"]["records"]:
-            if str(order_id) in item["product"]:
+            if order_id in item["product"]:
                 print(f'Order id was found in {item}')
                 break
         else:

@@ -44,7 +44,7 @@ class TestProductsAccruals:
                                       AUTH_UP2U_USER_WALLET, "https://up-dev.108dev.ru",
                                       "Test accrual for gg-ticket in UP2U")])
     def test_partners_gg_ticket_accruals(self, auth_token, office_url, test_name):
-        order_id = self.buy_gg_ticket(auth_token, "Air Test")
+        order_id = self.buy_gg_ticket(auth_token, "Fork")
         time.sleep(3)
         OfficeMarketplacesPage.search_order_in_partners_marketplaces(base_url=office_url, order_id=order_id)
 
