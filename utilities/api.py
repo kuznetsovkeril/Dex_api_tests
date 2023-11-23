@@ -260,6 +260,7 @@ class Dexart_api:
         return result
 
     """Получение парселей юзера"""
+
     @staticmethod
     def get_user_parcels(auth_token):
         resource = '/api/v1/user/parcels'
@@ -581,6 +582,47 @@ class Energy_api:
         print(f'Response: {result.text}')
         return result
 
+    @staticmethod  # buy EU
+    def buy_energy_units(auth_token):
+        resource = f'/api/orders'
+        url = ENERGY + resource
+
+        payload = json.dumps({
+            "packages": [
+                {
+                    "id": 1,
+                    "count": 1
+                }
+            ],
+            "payment_method": "transak"
+        })
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    @staticmethod
+    def callback_energy_units(order_id):
+        resource = f'/api/orders/callback'
+        url = DEXART + resource
+
+        payload = json.dumps({
+            "payment_id": order_id,
+            "status": "done",
+            "description": "Done manually for test"
+        })
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
 
 class Spacad_api:
     """проверка доступа к мероприятию по времени и вайт листу"""
@@ -726,5 +768,5 @@ class Office_api:
         headers = {'Content-Type': 'application/json'}
         print(f'URL: {url}')
         result = Http_method.post(url, payload, headers)
-        #print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
