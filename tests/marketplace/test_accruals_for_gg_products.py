@@ -53,7 +53,7 @@ class TestProductsAccruals:
     def test_oton_gg_ticket_accruals(self):
         order_id = self.buy_gg_ticket(AUTH_OTON_USER, "Air Test")
         time.sleep(3)
-        OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=USER_DEXART_OTON_AUTH, order_id=order_id)
+        OfficeMarketplacesPage.search_order_in_oton_marketplaces(oton_auth=USER_DEXART_OTON_AUTH, order_id=order_id)
 
     """Проверка начислений за билет в Dexart"""
 
@@ -95,7 +95,7 @@ class TestProductsAccruals:
 
         order_id = self.buy_booster(auth_token=AUTH_OTON_USER, booster_id=3)
         time.sleep(3)
-        OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=USER_DEXART_OTON_AUTH,
+        OfficeMarketplacesPage.search_order_in_oton_marketplaces(oton_auth=USER_DEXART_OTON_AUTH,
                                                                  order_id=order_id)
 
     """Проверка начислений за бустеры в Dexart"""

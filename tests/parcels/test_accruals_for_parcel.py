@@ -1,4 +1,3 @@
-
 import time
 
 import pytest
@@ -12,7 +11,6 @@ from utilities.utilities import Instruments
 
 
 class TestParcelAccruals:
-
     """Check accruals in partners offices for parcel purchase"""
 
     @pytest.mark.parametrize("auth_token, price_zone, office_url, test_name",
@@ -33,7 +31,7 @@ class TestParcelAccruals:
     def test_oton_accruals_for_parcel(self, buy_parcel, auth_token, price_zone, oton_auth):
         order_id, parcel_id = buy_parcel
         time.sleep(3)
-        OfficeMarketplacesPage.search_order_in_oton_marketplaces(base_url=OTON, oton_auth=oton_auth, order_id=order_id)
+        OfficeMarketplacesPage.search_order_in_oton_marketplaces(oton_auth=oton_auth, order_id=order_id)
 
     """Check accruals for parcel in dexart marketing"""
 

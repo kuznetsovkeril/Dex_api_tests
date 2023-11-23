@@ -7,9 +7,9 @@ from utilities.checking import Checking
 class OfficeMarketplacesPage:
 
     @staticmethod
-    def search_order_in_oton_marketplaces(base_url, oton_auth, order_id):
+    def search_order_in_oton_marketplaces(oton_auth, order_id):
 
-        result = Office_api.list_marketplace(base_url=base_url, auth=oton_auth)
+        result = Office_api.list_marketplace(auth=oton_auth)
         Checking.check_status_code(result, 200)
         data = json.loads(result.text)
 

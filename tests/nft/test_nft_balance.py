@@ -13,7 +13,6 @@ class Test_nft_balance:
 
     """Проверка полей в ответе баланса NFT у юзера"""
 
-    @pytest.mark.skip("было добавлено какое-то новое поле")
     def test_nft_user_balance(self):
         result = Nft_api.user_nft_balance(AUTH_DXA_USER)
         # проверка статус кода
@@ -25,12 +24,11 @@ class Test_nft_balance:
         expected_fields = ['id', 'catalog_nft_id', 'catalog_nft', 'user_id', 'transaction', 'amount', 'status', 'order',
                            'status_id', 'created_at']
         Checking.assert_values(fields_name, expected_fields)
+
         # проверка, что в ответе баланса есть поля с инфой об нфт
         fields_name_nft = Checking.show_json_fields_for_in_item(result, "data", 0, "catalog_nft")
-        expected_nft_fields = ['id', 'name', 'description', 'catalog_nft_group_id', 'picture', 'video', 'price',
-                               'price_usd', 'sale', 'created_at', 'updated_at']
+        expected_nft_fields = ['id', 'name', 'description', 'catalog_nft_group_id', 'picture', 'video', 'price', 'price_usd', 'sale', 'created_at', 'updated_at', 'is_active']
         Checking.assert_values(expected_nft_fields, fields_name_nft)
-        print("В ответе присутствуют все необходимые поля")
 
     """Проверка, что после покупки баланс нфт меняется"""
 

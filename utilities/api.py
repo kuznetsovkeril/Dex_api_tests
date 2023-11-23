@@ -51,9 +51,9 @@ class Dexart_api:
             'Authorization': 'Bearer ' + auth_token
         }
         print(f'URL: {url}')
-        print(f'All headers: {headers}')
+        # print(f'All headers: {headers}')
         result = Http_method.get(url, headers)
-        print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
     """Проверка заказа по id заказа"""
@@ -124,9 +124,9 @@ class Dexart_api:
             'Authorization': 'Bearer ' + auth_token
         }
         print(f'URL: {url}')
-        print(f'All headers: {headers}')
+        # print(f'All headers: {headers}')
         result = Http_method.post(url, payload, headers)
-        print(f'Response: {result.text}')
+        # print(f'Response: {result.text}')
         return result
 
     """Получение реферального дерева юзера"""
@@ -700,9 +700,9 @@ class Spacad_api:
 class Office_api:
 
     @staticmethod
-    def list_marketplace(base_url, auth):
+    def list_marketplace(auth):
         resource = f'/transaction/listMarketplace'
-        url = base_url + resource
+        url = OTON + resource
 
         payload = json.dumps({
             "auth": auth,
