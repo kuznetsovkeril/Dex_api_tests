@@ -9,25 +9,27 @@ from utilities.getters import Getters
 
 class TestNftBuyWithEmail:
 
+    # The feature was stopped. Users can't buy by only email, they have to auth
+
     """Проверка покупки NFT с указанием email"""
 
     @pytest.mark.prod
     @pytest.mark.parametrize("pay_driver, amount, payment_link",
                              [("oton", 1, "timbi"),
-                              ("nearpay", 3, "nearpay"),
-                              ("transak", 4, "transak")])
-    def test_buy_nft_with_email(self, pay_driver, amount, payment_link):
+                              ("nearpay", 2, "nearpay"),
+                              ("transak", 3, "transak")])
+    def test_buy_inactive_nft(self, pay_driver, amount, payment_link):
 
         # данные в тело запроса
         print(f'Покупаемое кол-во NFT: {amount}')
         email = "kirtest@fexbox.org"
         result = Nft_api.buy_nft_with_email(GRAVITY_NFT_ID, amount, pay_driver, email)
 
-        # от полученного статус кода зависит по какой логике будет осуществляться проверка
         Checking.check_status_code(result, 400)
 
         message = Getters.get_json_field_value_0(result, "message")
         Checking.assert_values("Inactive product provided", message)
+
     """Проверка, что неавторизованный юзер не может покупкать с баланса [DEX-3350]"""
 
     @pytest.mark.prod
