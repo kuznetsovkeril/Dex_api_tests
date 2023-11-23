@@ -3,14 +3,10 @@ from urllib.parse import urlparse, parse_qs
 import pytest
 
 from config_check import *
-from pages.dexart_balance_page import DexartBalancePage
-from pages.dexart_order_page import DexartOrderPage
-from pages.dexart_referral_page import DexartReferralPage
 from pages.office_marketplaces_page import OfficeMarketplacesPage
 from utilities.api import Energy_api
 from utilities.checking import Checking
 from utilities.getters import Getters
-from utilities.utilities import Instruments
 
 
 class TestBuyEnergyUnits:
