@@ -18,10 +18,6 @@ class LoginPage:
         self.page.keyboard.press('Enter')
         self.page.get_by_label("Password").fill(password)
         self.page.keyboard.press('Enter')
-        time.sleep(4)
-        # check that auth executed correctly
-        account_email = Getters.get_cookie_value(self.page, "accountEmail")
-        assert account_email == email, "Wrong account email"
 
     def email_register(self, email, password):
         self.page.goto(self.base_url)
@@ -33,7 +29,10 @@ class LoginPage:
             has_text="I understand and agree to the Terms of Sale, Privacy Policy and Rules and Guidel").get_by_role(
             "img").click()
         self.page.get_by_label("Password").press("Enter")
-        time.sleep(3)
+
+    def assert_auth(self, email):
+        # check that auth executed correctly
+        self.page.locator("span[class='headerText headerText_assets']").wait_for()
         account_email = Getters.get_cookie_value(self.page, "accountEmail")
         assert account_email == email, "Wrong account email"
 

@@ -1,4 +1,3 @@
-import re
 import time
 
 import pytest
@@ -45,6 +44,7 @@ class TestEnergyUnitsPage:
         page = browser_page
         lp = LoginPage(page, BASE_URL)
         lp.email_login(email=email, password="1qazXSW@")
+        lp.assert_auth(email=email)
 
         # go to TPF and go to Energy landing
         page.goto(BASE_URL + "/balance")
@@ -95,9 +95,9 @@ class TestEnergyUnitsPage:
         page.get_by_role("dialog").get_by_role("button", name="Buy").click()
 
         # get auth header value in the order request
-        with page.expect_request("https://stacking-api.108dev.space/api/orders") as response_info:
+        with page.expect_request("https://stacking-api.108dev.space/api/orders") as request_info:
             page.get_by_role("dialog").get_by_role("button", name="Buy").click()
-        request = response_info.value
+        request = request_info.value
         header_value = request.header_value("authorization")
         # assert request header with auth token
         assert header_value == f'Bearer {AUTH_KIRTEST}'
