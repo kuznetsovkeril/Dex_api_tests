@@ -40,7 +40,8 @@ class TestCryptopoliaLink:
         lp = LoginPage(page, BASE_URL + cryptopolia_link + uuid)
         lp.email_register(email, "1qazXSW@")
         lp.assert_auth(email)
-        time.sleep(1)
+        # check that page reloaded for authorized user
+        page.locator("span[class='headerText headerText_assets']").wait_for()
         # check that my user become a Cryptopolist
         auth_token = Getters.get_cookie_value(page, "accountToken")
         self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
@@ -76,8 +77,18 @@ class TestCryptopoliaLink:
         lp.assert_auth(email)
         # go by cryptopolia link
         page.goto(BASE_URL + cryptopolia_link + uuid)
+
         # check that my user become a Cryptopolist
         auth_token = Getters.get_cookie_value(page, "accountToken")
         self.check_cryptopolia_user(auth_token=auth_token, uuid=uuid)
 
     # check ref data priority
+    # def test_priority_ref_links(self, browser_page):
+    #     cryptopolia_link = "?group=Cryptopolia&uuid="
+    #     uuid = "387665745"
+    #
+    #
+    #
+    #     page = browser_page
+    #     page.goto(BASE_URL + cryptopolia_link + uuid)
+
