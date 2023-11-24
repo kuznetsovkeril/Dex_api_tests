@@ -14,7 +14,7 @@ class TestEnergyUnitsPage:
     # test Get Energy UNITS button, that it is available for all users
 
     @pytest.mark.parametrize("auth_token, test_name", [
-        (AUTH_DEXART_WALLET, "Test EU for Low zone parcel"),
+        (AUTH_DEXART_WALLET, "Test dexart wallet"),
         (AUTH_GOOGLE_ATON, "Test google aton"),
         (AUTH_OTON_USER, "Test oton"),
         (AUTH_SPACAD_USER, "Test spacad email"),
