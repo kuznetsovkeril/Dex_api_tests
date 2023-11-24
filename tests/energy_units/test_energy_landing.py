@@ -37,7 +37,6 @@ class TestEnergyUnitsPage:
         page1 = page1_info.value
         expect(page1).to_have_title("DEXART Metaverse Tokens Staking")
 
-    # check if
     def test_set_email_on_landing(self, browser_page):
         email = "test@fexbox.org"
         # open browser and login
