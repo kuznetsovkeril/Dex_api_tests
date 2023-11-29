@@ -68,6 +68,21 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    """getting all orders"""
+
+    @staticmethod
+    def get_orders(auth_token):
+        resource = '/api/v1/user/orders/'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        url = DEXART + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
+        print(f'Response: {result.text}')
+        return result
+
     """Регистрация по рефке"""
 
     @staticmethod
@@ -608,7 +623,7 @@ class Energy_api:
     @staticmethod
     def callback_energy_units(order_id):
         resource = f'/api/orders/callback'
-        url = DEXART + resource
+        url = ENERGY + resource
 
         payload = json.dumps({
             "payment_id": order_id,

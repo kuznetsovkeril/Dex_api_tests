@@ -1,5 +1,7 @@
 import json
 
+from utilities.api import Dexart_api
+
 """Методы получения необходимых данных из JSON"""
 
 
@@ -93,6 +95,13 @@ class Getters():
             field_name_3]  # Получаем объект с заданным индексом
         print(f'Значение из объекта #{index + 1} в поле "{field_name_2}.{field_name_3}": {field_value}')
         return field_value
+
+    @staticmethod
+    def get_order_dxa_amount(order_id):
+        result = Dexart_api.check_order(order_id)
+        dxa_amount = Getters.get_json_field_value_2(result, "data", "dxa_amount")
+        dxa_amount_float = float(dxa_amount.replace(",", ""))
+        return dxa_amount_float
 
     """Method for UI tests"""
 

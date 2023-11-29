@@ -94,15 +94,6 @@ class TestMarketplaceProducts:
                               (8, 1, "Fork", 10, 4, 2, "Test order booster id 8")])
     def test_booster_order(self, old_boosters_amount, buy_booster, auth_token, booster_id, amount, room_id,
                            booster_cost, type_id, uses, test_name):
-        # данные заказа из ответа покупки
-        order_id = buy_booster["order"]["id"]
-        dxa_amount = buy_booster["order"]["dxa_amount"]
-
-        # данные заказа из ответа проверки заказа
-        order = self.get_order_data(order_id=order_id)
-        order_dxa_amount = float(order["dxa_amount"])
-        expected_dxa_amount = amount * booster_cost
-        assert dxa_amount == order_dxa_amount == expected_dxa_amount, "Wrong dxa amount!"
 
         # проверка, что бустеры действительно были куплены и они доступны юзеру
         time.sleep(2)

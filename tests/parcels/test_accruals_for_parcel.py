@@ -4,13 +4,14 @@ import pytest
 
 from config_check import *
 from pages.dexart_balance_page import DexartBalancePage
-from pages.dexart_order_page import DexartOrderPage
 from pages.dexart_referral_page import DexartReferralPage
 from pages.office_marketplaces_page import OfficeMarketplacesPage
+from utilities.getters import Getters
 from utilities.utilities import Instruments
 
 
 class TestParcelAccruals:
+
     """Check accruals in partners offices for parcel purchase"""
 
     @pytest.mark.parametrize("auth_token, price_zone, office_url, test_name",
@@ -41,7 +42,7 @@ class TestParcelAccruals:
         # get order id
         order_id, parcel_id = buy_parcel
         # check order and get dxa_amount
-        dxa_amount = DexartOrderPage.get_odred_dxa_amount(order_id=order_id)
+        dxa_amount = Getters.get_order_dxa_amount(order_id=order_id)
         # get sponsor's ref percent
         ref_percent = DexartReferralPage.get_sponsor_percent(AUTH_DEXART_SPONSOR)
         # check transaction in daxart (time and amount)
