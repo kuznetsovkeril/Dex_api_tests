@@ -103,6 +103,19 @@ class Getters():
         dxa_amount_float = float(dxa_amount.replace(",", ""))
         return dxa_amount_float
 
+    @staticmethod
+    def get_dexart_transaction_by_order_id(auth_token, order_id):
+        result = Dexart_api.user_transaction(auth_token)
+        data = json.loads(result.text)
+
+        for item in data["data"]:
+            if order_id in item["description"]:
+                print(f'Order id was found in {item}')
+                transaction_id = item["id"]
+                return transaction_id
+            else:
+                raise ValueError("Order id was not found!")
+
     """Method for UI tests"""
 
     @staticmethod

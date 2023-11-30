@@ -83,6 +83,48 @@ class Dexart_api:
         print(f'Response: {result.text}')
         return result
 
+    """3D room rent methods"""
+
+    # get event calendar, where prefix is room room name
+    @staticmethod
+    def get_events_calendar(room_name):
+        resource = f'/api/v1/events/calendar?prefix={room_name}'
+        headers = {'Content-Type': 'application/json'}
+        url = DEXART + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
+        # print(f'Response: {result.text}')
+        return result
+
+    # book a 3d room
+    @staticmethod
+    def book_room(auth_token, date, room_name):
+        resource = '/api/v1/events/book'
+        url = DEXART + resource
+
+        payload = {'dates[0]': date,
+                   'prefix': room_name,
+                   'payment_method': 'balance'}  # always balance is user path
+        headers = {
+            'app-timezone': '-1:00:00',
+            'Authorization': 'Bearer ' + auth_token
+        }
+        print(f'URL: {url}')
+        result = Http_method.post(url, payload, headers)
+        print(f'Response: {result.text}')
+        return result
+
+    # get the rooms list
+    @staticmethod
+    def get_spaces_list():
+        resource = f'/api/v1/spaces'
+        headers = {'Content-Type': 'application/json'}
+        url = DEXART + resource
+        print(f'URL: {url}')
+        result = Http_method.get(url, headers)
+        # print(f'Response: {result.text}')
+        return result
+
     """Регистрация по рефке"""
 
     @staticmethod
@@ -205,6 +247,21 @@ class Dexart_api:
         }
         result = Http_method.get(url, headers)
         return result
+
+    @staticmethod # get_transaction_by_id
+    def get_transaction_by_id(transaction_id):
+        resource = f'/api/v1/transactions/{transaction_id}'
+        url = DEXART + resource
+
+        payload = ""
+        headers = {
+            'api-key': API_KEY
+        }
+        print(f'URL: {url}')
+        result = Http_method.put(url, payload, headers)
+        # print(f'Response: {result.text}')
+        return result
+
 
     """Получение спискай парселей по району"""
 
@@ -763,11 +820,12 @@ class Office_api:
 
         payload = json.dumps({
             "auth": auth,
+            "domain": "easy-new",
             "lang": "en",
-            "request": "{\"cmd\":\"get\",\"offset\":0,\"limit\":50,\"sort\":[{\"field\":\"mdate\","
-                       "\"direction\":\"desc\"}]"
+            "request": "{\"cmd\":\"get\",\"offset\":0,\"limit\":25,\"sort\":[{\"field\":\"mdate\",\"direction\":\"desc\"}]}",
+            "signature": 1,
+            "token": auth
         })
-        print(payload)
         headers = {'Content-Type': 'application/json'}
         print(f'URL: {url}')
         result = Http_method.post(url, payload, headers)

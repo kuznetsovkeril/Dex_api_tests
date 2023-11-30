@@ -35,7 +35,7 @@ class TestBuyEnergyUnits:
         # send callback
         Energy_api.callback_energy_units(order_id=order_id)
 
-        time.sleep(2)
+        time.sleep(8)
         # check accrual in Oton
         OfficeMarketplacesPage.search_order_in_oton_marketplaces(oton_auth=USER_DEXART_OTON_AUTH, order_id=order_id)
 

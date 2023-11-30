@@ -20,7 +20,6 @@ class TestProductsAccruals:
         result = Dexart_api.ticket_buy(auth_token=auth_token, room_id=room_id)
         Checking.check_status_code(result, 200)
         order_id = Getters.get_json_field_value_2(result, "data", "id")
-        dxa_amount = Getters.get_json_field_value_2(result, "data", "dxa_amount")
         return str(order_id)
 
     @staticmethod
@@ -32,7 +31,7 @@ class TestProductsAccruals:
     def get_last_order_id(auth_token):
         result = Dexart_api.get_orders(auth_token)
         order_id = Getters.get_object_json_field_value(result, "data", 0, "id")
-        return order_id
+        return str(order_id)
 
     """Проверка начислений за билет в партнерских кабинетах"""
 
@@ -85,16 +84,17 @@ class TestProductsAccruals:
                               (AUTH_UP2U_USER_WALLET, "https://up-dev.108dev.ru", 3,
                                "Test accrual for booster in UP2U")])
     def test_partners_boosters_accruals(self, auth_token, office_url, booster_id, test_name):
-        order_id = self.buy_booster(auth_token, booster_id)
-
-        time.sleep(5)
+        self.buy_booster(auth_token, booster_id)
+        time.sleep(3)
+        order_id = self.get_last_order_id(auth_token=auth_token)
         OfficeMarketplacesPage.search_order_in_partners_marketplaces(base_url=office_url, order_id=order_id)
 
     """Проверка начислений за бустер в OTON"""
 
     def test_oton_booster_accruals(self):
-        order_id = self.buy_booster(auth_token=AUTH_OTON_USER, booster_id=3)
+        self.buy_booster(auth_token=AUTH_OTON_USER, booster_id=3)
         time.sleep(3)
+        order_id = self.get_last_order_id(auth_token=AUTH_OTON_USER)
         OfficeMarketplacesPage.search_order_in_oton_marketplaces(oton_auth=USER_DEXART_OTON_AUTH,
                                                                  order_id=order_id)
 

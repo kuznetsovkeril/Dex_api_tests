@@ -24,6 +24,6 @@ class Http_method:
         return result
 
     @staticmethod
-    def put(url, payload):
-        result = requests.delete(url, data=payload, headers=Http_method.headers, cookies=Http_method.cookies)
+    def put(url, payload, headers):
+        result = requests.put(url, data=payload, headers=headers, cookies=Http_method.cookies)
         return result
